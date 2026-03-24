@@ -1,0 +1,30 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgA" x1="84" y1="48" x2="424" y2="464" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="0.58" stop-color="#EEF5FF"/>
+      <stop offset="1" stop-color="#E7F0FF"/>
+    </linearGradient>
+    <linearGradient id="ringA" x1="150" y1="120" x2="384" y2="390" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7DEBFF"/>
+      <stop offset="0.55" stop-color="#6D8CFF"/>
+      <stop offset="1" stop-color="#F472B6"/>
+    </linearGradient>
+    <linearGradient id="coreA" x1="194" y1="164" x2="328" y2="348" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7DEBFF"/>
+      <stop offset="0.6" stop-color="#6D8CFF"/>
+      <stop offset="1" stop-color="#F472B6"/>
+    </linearGradient>
+  </defs>
+  <rect x="32" y="32" width="448" height="448" rx="120" fill="url(#bgA)"/>
+  <circle cx="256" cy="256" r="162" stroke="url(#ringA)" stroke-width="24" opacity="0.95"/>
+  <circle cx="256" cy="256" r="108" stroke="#BFD0EA" stroke-width="12" opacity="0.52"/>
+  <circle cx="256" cy="256" r="54" fill="url(#coreA)"/>
+  <circle cx="256" cy="256" r="26" fill="#F9FBFF"/>
+  <path d="M256 94C300 94 340 112 370 142" stroke="#F9FBFF" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
+  <path d="M142 370C112 340 94 300 94 256" stroke="#7DEBFF" stroke-width="10" stroke-linecap="round" opacity="0.5"/>
+  <circle cx="352" cy="160" r="18" fill="#F472B6"/>
+  <circle cx="158" cy="272" r="13" fill="#7DEBFF" opacity="0.9"/>
+  <circle cx="336" cy="352" r="11" fill="#6D8CFF" opacity="0.95"/>
+  <path d="M352 160C327 186 312 208 301 236" stroke="#F472B6" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
+</svg>

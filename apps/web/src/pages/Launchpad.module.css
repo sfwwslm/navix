@@ -1,0 +1,501 @@
+.pageShell {
+  align-self: stretch;
+  width: 100%;
+  margin: 24px auto 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--app-text-primary);
+}
+
+.ghostButton {
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--app-card-border);
+  background: var(--app-button-secondary-bg);
+  color: var(--app-text-primary);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.ghostButton:hover,
+.ghostButton:focus-visible {
+  background: var(--app-button-secondary-hover);
+  border-color: var(--app-accent-border);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.stateCard {
+  background: var(--app-card-bg-strong);
+  border: 1px solid var(--app-card-border);
+  border-radius: 20px;
+  padding: 16px 18px;
+  color: var(--app-text-secondary);
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.error {
+  border-color: rgba(248, 113, 113, 0.5);
+  color: #ef9ca5;
+}
+
+.groupList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pageLayout {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.groupSidebar {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  z-index: 40;
+  transform: translate(-18px, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.groupSidebar[data-visible="true"] {
+  transform: translate(12px, -50%);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.groupSidebarTrigger {
+  position: fixed;
+  left: 0;
+  top: 112px;
+  bottom: 96px;
+  width: 28px;
+  z-index: 39;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.groupSidebarHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  padding: 10px 8px 10px 0;
+  opacity: 0.46;
+  color: var(--app-text-muted);
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.groupSidebarTrigger:hover .groupSidebarHint {
+  opacity: 0.82;
+  color: var(--app-text-primary);
+  transform: translateX(1px);
+}
+
+.groupSidebarHintLine {
+  width: 2px;
+  height: 40px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(var(--app-surface-rgb), 0.62),
+    transparent
+  );
+}
+
+.groupSidebarHintArrow {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+}
+
+.groupSidebarHintArrow svg {
+  width: 100%;
+  height: 100%;
+}
+
+.groupSidebarRail {
+  display: grid;
+  gap: 8px;
+  width: 172px;
+  max-height: min(62vh, 520px);
+  overflow: auto;
+  padding: 10px;
+  border-radius: 22px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.14);
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.groupSidebarButton {
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--app-text-muted);
+  text-align: left;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.groupSidebarButton:hover,
+.groupSidebarButton:focus-visible {
+  border-color: var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.18);
+  color: var(--app-text-primary);
+  transform: translateX(1px);
+  outline: none;
+}
+
+.groupSidebarButton[data-active="true"] {
+  border-color: var(--app-accent-border);
+  background: color-mix(in srgb, var(--app-accent-soft) 72%, transparent);
+  color: var(--app-text-primary);
+}
+
+.groupCard {
+  border: 1px solid var(--app-card-border);
+  border-radius: 22px;
+  padding: 16px 16px 14px;
+  background: transparent;
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(18px);
+  scroll-margin-top: 118px;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.groupName {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--app-text-primary);
+}
+
+.groupBadge {
+  background: var(--app-accent-soft);
+  border: 1px solid var(--app-accent-border);
+  color: var(--app-text-primary);
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.siteGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 10px;
+}
+
+.siteCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-height: 108px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  padding: 12px 10px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.siteCard:hover,
+.siteCard:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(8, 12, 22, 0.12);
+  border-color: var(--app-accent-border);
+  outline: none;
+}
+
+.contextMenu {
+  position: fixed;
+  z-index: 2100;
+  min-width: 156px;
+  padding: 6px;
+  border-radius: 16px;
+  border: 1px solid var(--app-card-border);
+  background: color-mix(in srgb, var(--app-card-bg-strong) 92%, transparent);
+  box-shadow: var(--app-shadow-hard);
+  backdrop-filter: blur(18px);
+}
+
+.contextMenuButton {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--app-text-primary);
+  text-align: left;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.contextMenuButton:hover,
+.contextMenuButton:focus-visible {
+  background: rgba(var(--app-surface-rgb), 0.28);
+  color: var(--app-text-primary);
+  outline: none;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 12, 22, 0.58);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 2000;
+  backdrop-filter: blur(8px);
+}
+
+.modalCard {
+  width: min(680px, 92vw);
+  background: linear-gradient(
+    180deg,
+    rgba(var(--app-surface-rgb), 0.42),
+    rgba(var(--app-surface-rgb), 0.22)
+  );
+  border: 1px solid var(--app-card-border);
+  border-radius: 26px;
+  padding: 22px 22px 20px;
+  box-shadow: var(--app-shadow-hard);
+  color: var(--app-text-primary);
+  backdrop-filter: blur(24px);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.modalIdentity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.modalIdentityText {
+  display: grid;
+  gap: 4px;
+}
+
+.modalEyebrow {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.modalSubtitle {
+  margin: 0;
+  color: var(--app-text-secondary);
+  line-height: 1.6;
+}
+
+.modalCloseButton {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--app-card-border);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--app-text-muted);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.modalCloseButton:hover,
+.modalCloseButton:focus-visible {
+  border-color: var(--app-accent-border);
+  background: rgba(var(--app-surface-rgb), 0.22);
+  color: var(--app-text-primary);
+  outline: none;
+}
+
+.modalLabel {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.modalUrl {
+  margin: 6px 0 0;
+  color: var(--app-text-primary);
+  word-break: break-all;
+  line-height: 1.6;
+}
+
+.modalDesc {
+  margin: 8px 0 0;
+  color: var(--app-text-secondary);
+  line-height: 1.7;
+}
+
+.modalBody {
+  display: grid;
+  gap: 12px;
+}
+
+.modalSection,
+.modalField {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.14);
+}
+
+.modalSectionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.iconBubble {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #0f172a;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+.iconImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.defaultIcon {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+}
+
+.defaultIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.defaultIconLabel {
+  position: absolute;
+  bottom: 5px;
+  right: 7px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: rgba(12, 18, 32, 0.92);
+}
+
+.siteContent {
+  min-width: 0;
+  text-align: center;
+}
+
+.siteTitle {
+  margin: 0;
+  font-weight: 700;
+  color: var(--app-text-primary);
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+}
+
+.siteUrl,
+.siteDesc {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .pageShell {
+    margin-top: 18px;
+  }
+
+  .groupSidebarTrigger,
+  .groupSidebar {
+    display: none;
+  }
+
+  .groupHeader {
+    align-items: flex-start;
+  }
+
+  .siteGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .modalHeader,
+  .modalIdentity,
+  .modalSectionGrid {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .modalCard {
+    padding: 18px;
+  }
+}

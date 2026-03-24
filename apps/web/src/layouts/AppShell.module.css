@@ -1,0 +1,104 @@
+.shell {
+  width: 100%;
+  --app-shell-safe-inset: 200px;
+  --app-shell-inline-gap: calc(
+    var(--app-shell-safe-inset) + var(--app-content-inset, 24px)
+  );
+  --app-shell-track-width: calc(100vw - (var(--app-shell-inline-gap) * 2));
+  --app-shell-track-min-width: min(
+    1280px,
+    calc(100vw - (var(--app-shell-safe-inset) * 2))
+  );
+}
+
+.content {
+  position: relative;
+  width: var(--app-shell-track-width);
+  min-width: var(--app-shell-track-min-width);
+  min-height: calc(100vh - 80px);
+  margin: 28px auto 40px;
+}
+
+.pageActions {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 1350;
+  display: flex;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.pageActionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--app-card-border);
+  background: color-mix(in srgb, var(--app-card-bg-strong) 84%, transparent);
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(18px);
+  color: var(--app-text-primary);
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.pageActionButton:hover,
+.pageActionButton:focus-visible,
+.pageActionButton[data-open="true"] {
+  border-color: var(--app-accent-border);
+  background: color-mix(in srgb, var(--app-accent-soft) 72%, transparent);
+  box-shadow: var(--app-shadow-hard);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.pageActionIcon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+.userActionAvatar {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--app-accent-soft) 80%, transparent);
+  color: var(--app-text-primary);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .shell {
+    --app-shell-safe-inset: 10px;
+  }
+
+  .content {
+    margin-top: 18px;
+    margin-bottom: 110px;
+  }
+
+  .pageActions {
+    top: 12px;
+    right: 10px;
+    gap: 8px;
+  }
+
+  .pageActionButton {
+    width: 42px;
+    height: 42px;
+  }
+}

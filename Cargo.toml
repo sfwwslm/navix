@@ -1,0 +1,71 @@
+[workspace]
+resolver = "2"
+members = [
+    "apps/server",                                  # [Rust/Axum] 后端服务
+    "apps/desktop/src-tauri",                       # [Tauri] 桌面端 Rust 宿主
+    "packages/shared-rs",                           # [Rust] 共享逻辑库
+]
+
+[workspace.package]
+version = "0.1.0-alpha.1"
+edition = "2024"
+authors = ["sfwwslm"]
+
+[workspace.dependencies]
+shared-rs = { path = "packages/shared-rs" }         # 共享逻辑库
+
+# shared
+serde = { version = "1.0.228" }                     # 通用序列化/反序列化框架
+serde_json = { version = "1.0.149" }                # JSON 解析与生成
+
+# desktop
+log = { version = "0.4.28" }                        # 日志
+scraper = { version = "0.24.0" }                    # HTML 解析器
+url = { version = "2.5.7" }                         # URL 解析
+sha2 = { version = "0.10.9" }                       # SHA-2
+hex = { version = "0.4.3" }                         # 十六进制
+
+# server
+tokio = { version = "1.50.0" }                      # 异步运行时
+tokio-util = { version = "0.7.16" }                 # tokio 的工具
+axum = { version = "0.8.8" }                        # 异步 Web 框架
+axum-extra = { version = "0.10.3" }                 # Axum 扩展功能（类型化 Header）
+axum-server = { version = "0.7.3" }                 # Axum HTTPS/TLS 服务支持
+tower-http = { version = "0.6.8" }                  # HTTP 中间件（日志追踪、跨域等）
+httpdate = { version = "1.0.3" }                    # HTTP-date 格式化与解析
+mime_guess = { version = "2.0.4" }                  # 根据文件扩展名猜测 MIME 类型
+validator = { version = "0.20.0" }                  # 数据验证
+chrono = { version = "0.4.44" }                     # 日期时间处理，支持 Serde
+uuid = { version = "1.17.0" }                       # UUID 生成与序列化
+dashmap = { version = "6.1.0" }                     # 并发安全的 HashMap，作为内存缓存来实现
+sqlx = { version =  "0.8.6" }                       # 数据库 / ORM
+jsonwebtoken = { version = "9.3.1" }                # JWT 生成与验证
+bcrypt = { version = "0.15.1" }                     # 密码哈希加密
+rustls = { version = "0.23.37" }                    # TLS 加密库
+md5 = { version = "0.7.0" }                         # 分块校验和计算
+dotenvy = { version = "0.15.7" }                    # 读取 .env 文件
+clap = { version = "4.5.60" }                       # 命令行参数解析（支持环境变量）
+tracing = { version = "0.1.44" }                    # 日志追踪
+tracing-subscriber = { version = "0.3.22" }         # 日志订阅与格式化
+rust-embed = { version = "8.4.0" }                  # 将静态文件嵌入可执行文件
+shadow-rs = { version = "1.2.1" }                   # 构建时注入 Git/版本信息
+anyhow = { version = "1.0.98" }                     # 错误处理（运行时）
+semver = { version = "1.0.27" }                     # 版本解析
+winres = { version = "0.1.12" }                     # Windows 资源文件
+
+[profile.dev]
+incremental = true                                  # 开发模式下启用增量编译
+
+[profile.release]
+lto = true                                          # 链接时优化
+strip = true                                        # 删除未使用的代码
+codegen-units = 1                                   # 优化级别
+opt-level = "s"                                     # 最优化级别
+panic = "abort"                                     # 运行时错误处理
+
+[profile.fast-release]
+inherits = "release"                                # 继承 Release 配置
+lto = false                                         # 禁用链接时优化
+strip = false                                       # 禁用代码压缩
+codegen-units = 256                                 # 优化级别
+opt-level = 3                                       # 最优化级别

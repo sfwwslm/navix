@@ -1,0 +1,9 @@
+Package: navix-server
+Version: 0.1.0-alpha.1
+Section: web
+Priority: optional
+Architecture: amd64
+Essential: no
+Installed-Size: 4096
+Maintainer: sfwwslm
+Description: Navix server service

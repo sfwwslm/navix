@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Navix",
+  "version": "0.1.0-alpha.1",
+  "identifier": "cc.vust.navix",
+  "build": {
+    "beforeDevCommand": "pnpm web:dev",
+    "beforeBuildCommand": "pnpm web:build",
+    "devUrl": "http://localhost:1420",
+    "frontendDist": "../dist",
+    "removeUnusedCommands": true
+  },
+  "bundle": {
+    "active": true,
+    "createUpdaterArtifacts": true,
+    "category": "Utility",
+    "shortDescription": "聚焦导航与同步的高效桌面助手。",
+    "longDescription": "Navix 是一款基于 Tauri v2 和 React v19 构建的现代化桌面助手应用。它聚焦支持内外网切换的智能导航面板，以及安全的多端数据同步能力，旨在提供流畅、美观且高效的导航管理体验。",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDE4Rjc0OERCMUJEMUUxNzIKUldSeTRkRWIyMGozR0RjZVk2V0ZLeEFoUWR6V2dmUGxPeG4xLzdIMWFlaXVTZWt0UnpuTGp0cGQK",
+      "endpoints": [
+        "https://github.com/sfwwslm/navix/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    },
+    "fs": {
+      "requireLiteralLeadingDot": false
+    }
+  },
+  "app": {
+    "macOSPrivateApi": true,
+    "windows": [
+      {
+        "title": "Navix",
+        "width": 1024,
+        "height": 768,
+        "minWidth": 1024,
+        "minHeight": 768,
+        "decorations": false,
+        "visible": false,
+        "transparent": true
+      }
+    ],
+    "security": {
+      "csp": {
+        "img-src": "'self' asset: http://asset.localhost blob:"
+      },
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$HOME/**", "$APPCONFIG/**", "$APPDATA/**"]
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove|upgrade|deconfigure)
+        if systemctl list-units --type=service | grep -q 'navix-server.service'; then
+            if systemctl is-active --quiet navix-server; then
+                systemctl stop navix-server
+            fi
+        fi
+        ;;
+esac
+
+exit 0

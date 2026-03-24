@@ -1,0 +1,36 @@
+#!/bin/bash
+set -e
+
+SERVICE="navix-server"
+DATA_DIR="/var/lib/$SERVICE"
+BACKUP_DIR="${DATA_DIR}.bak"
+LOG_DIR="/var/log/$SERVICE"
+CONFIG_FILE="/etc/$SERVICE/config.toml"
+
+case "$1" in
+    remove)
+        # 禁用服务，但不报错
+        if systemctl list-unit-files | grep -q "${SERVICE}.service"; then
+            systemctl disable "$SERVICE" || true
+        fi
+        ;;
+    purge)
+        # 确保禁用服务
+        if systemctl list-unit-files | grep -q "${SERVICE}.service"; then
+            systemctl disable "$SERVICE" || true
+        fi
+
+        # 备份或清理数据
+        if [ -d "$DATA_DIR" ]; then
+            echo "Backing up data to ${BACKUP_DIR}..."
+            rm -rf "$BACKUP_DIR"
+            mv "$DATA_DIR" "$BACKUP_DIR"
+        fi
+
+        # 清理日志与配置文件
+        rm -rf "$LOG_DIR" || true
+        rm -f "$CONFIG_FILE" || true
+        ;;
+esac
+
+exit 0

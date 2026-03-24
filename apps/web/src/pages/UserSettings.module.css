@@ -1,0 +1,173 @@
+.pageShell {
+  width: min(980px, 96vw);
+  margin: 24px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.6rem;
+  letter-spacing: -0.03em;
+  color: var(--app-text-primary);
+}
+
+.heroCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 24px;
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(244, 114, 182, 0.14),
+      rgba(96, 165, 250, 0.12)
+    ),
+    var(--app-card-bg);
+  border: 1px solid var(--app-card-border);
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.heroLabel {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.95rem;
+}
+
+.heroName {
+  margin: 6px 0 0;
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--app-text-primary);
+}
+
+.heroMeta {
+  margin: 6px 0 0;
+  color: var(--app-text-secondary);
+}
+
+.heroBadge {
+  padding: 10px 14px;
+  background: rgba(var(--app-surface-rgb), 0.45);
+  border: 1px solid var(--app-card-border);
+  border-radius: 14px;
+  color: var(--app-text-primary);
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.settingsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  background: var(--app-card-bg);
+  border: 1px solid var(--app-card-border);
+  border-radius: 22px;
+  padding: 18px 20px;
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.cardHeader h3 {
+  margin: 0;
+  color: var(--app-text-primary);
+}
+
+.cardHeader p {
+  margin: 6px 0 0;
+  color: var(--app-text-muted);
+  font-size: 0.95rem;
+}
+
+.cardForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.cardForm label {
+  color: var(--app-text-secondary);
+  font-size: 0.95rem;
+}
+
+.cardForm input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.34);
+  color: var(--app-text-primary);
+}
+
+.cardForm input:focus {
+  border-color: var(--app-accent-border);
+  outline: none;
+  box-shadow: 0 0 0 4px var(--app-accent-soft);
+}
+
+.cardForm button {
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--app-accent-border);
+  background: linear-gradient(135deg, var(--app-accent), #60a5fa);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.cardForm button:hover,
+.cardForm button:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: var(--app-shadow-soft);
+  outline: none;
+}
+
+.inlineMessage {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.3);
+  color: var(--app-text-primary);
+}
+
+.inlineMessage.success {
+  border-color: rgba(52, 211, 153, 0.5);
+  background: rgba(52, 211, 153, 0.12);
+}
+
+.inlineMessage.error {
+  border-color: rgba(248, 113, 113, 0.5);
+  background: rgba(248, 113, 113, 0.1);
+}
+
+@media (max-width: 640px) {
+  .pageShell {
+    width: calc(100vw - 20px);
+  }
+
+  .heroCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

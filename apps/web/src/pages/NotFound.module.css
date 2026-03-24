@@ -1,0 +1,22 @@
+.notFoundPage {
+  text-align: center;
+}
+
+.notFoundContent {
+  margin: 2rem 0 2.5rem;
+}
+
+.statusCode {
+  font-size: 6rem;
+  font-weight: 700;
+  color: var(--app-text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.06em;
+}
+
+.suggestionText {
+  font-size: 0.95rem;
+  color: var(--app-text-secondary);
+  margin-top: 0.5rem;
+  line-height: 1.7;
+}

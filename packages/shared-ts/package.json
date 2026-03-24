@@ -1,0 +1,19 @@
+{
+  "name": "@navix/shared-ts",
+  "version": "0.1.0-alpha.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate-contracts.mjs",
+    "type-check": "pnpm -w tsc -p packages/shared-ts/tsconfig.json --noEmit",
+    "lint": "eslint --config ../../eslint.config.ts src --max-warnings=0",
+    "check": "pnpm type-check && pnpm lint",
+    "format": "pnpm -w prettier --write packages/shared-ts/src/"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

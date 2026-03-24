@@ -1,0 +1,26 @@
+.appFooter {
+  position: fixed;
+  bottom: 16px;
+  right: 18px;
+  font-size: 0.75rem;
+  color: var(--app-text-muted);
+  opacity: 0.72;
+  font-family: "Fira Code", "Consolas", monospace;
+  z-index: 1000;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  padding: 0;
+}
+
+.appFooter:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .appFooter {
+    right: 14px;
+    bottom: 80px;
+  }
+}

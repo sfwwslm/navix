@@ -1,0 +1,27 @@
+packages:
+  - 'apps/web'           # [TS/React] 网页端
+  - 'apps/desktop'       # [Tauri] 桌面端前端部分（通常包含根目录的 package.json）
+  - 'packages/shared-ts' # [TS] 共享 API/类型
+  - 'packages/shared-ui' # [TS/React] 组件库
+
+catalog:
+  '@eslint/js': 10.0.1
+  eslint: 10.0.3
+  eslint-plugin-react-hooks: 7.0.1
+  eslint-plugin-react-refresh: 0.5.2
+  globals: 17.4.0
+  jiti: 2.6.1
+  '@types/node': 24.12.0
+  '@types/react': 19.2.7
+  '@types/react-dom': 19.2.3
+  '@vitejs/plugin-react': 5.1.2
+  '@iconify/react': 6.0.2
+  prettier: 3.6.2
+  react: 19.2.3
+  react-dom: 19.2.3
+  react-router-dom: 7.11.0
+  ts-prune: 0.10.3
+  typescript: 5.9.3
+  typescript-eslint: "^8.56.1"
+  vite: 7.3.0
+  zod: 4.1.11

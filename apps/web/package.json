@@ -1,0 +1,32 @@
+{
+  "name": "@navix/web",
+  "private": true,
+  "version": "0.1.0-alpha.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "web:build": "tsc -b && vite build",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint --config ../../eslint.config.ts src --max-warnings=0",
+    "check": "pnpm type-check && pnpm lint",
+    "preview": "vite preview",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "@iconify/react": "catalog:",
+    "@navix/shared-ts": "workspace:*",
+    "@navix/shared-ui": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-router-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

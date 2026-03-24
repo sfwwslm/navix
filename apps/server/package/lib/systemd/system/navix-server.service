@@ -1,0 +1,21 @@
+[Unit]
+Description=Navix Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/navix-server
+WorkingDirectory=/var/lib/navix-server
+User=navix
+Group=navix
+Environment=RUST_LOG=info
+Restart=always
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+StandardOutput=append:/var/log/navix-server/output.log
+StandardError=append:/var/log/navix-server/error.log
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // 编译目标 JavaScript 版本为 ES2020
+    "useDefineForClassFields": true, // 启用 Class Fields 的 ECMAScript 私有字段提案支持
+    "lib": ["ES2020", "DOM", "DOM.Iterable"], // 引入 ES2020、DOM 和 DOM.Iterable 的类型定义
+    "module": "ESNext", // 模块化方案为 ESNext
+    "skipLibCheck": true, // 跳过所有声明文件（*.d.ts）的类型检查
+
+    /* Bundler mode */
+    "moduleResolution": "bundler", // 模块解析策略为 bundler，适用于 Vite 等打包工具
+    "allowImportingTsExtensions": true, // 允许导入带有 .ts, .tsx, .mts, .cts 扩展名的文件
+    "resolveJsonModule": true, // 允许导入 .json 文件，并自动推断其类型
+    "isolatedModules": true, // 确保每个文件都可以安全地单独编译（不依赖其他文件进行类型检查）
+    "noEmit": true, // 不生成输出文件，仅用于类型检查
+    "jsx": "react-jsx", // JSX 工厂函数使用 React 17+ 的新 JSX 转换
+
+    /* Linting */
+    "strict": true, // 启用所有严格类型检查选项
+    "noUnusedLocals": true, // 报告未使用的局部变量
+    "noUnusedParameters": true, // 报告未使用的函数参数
+    "noFallthroughCasesInSwitch": true, // 报告 switch 语句中未处理的 fallthrough 情况
+    "baseUrl": ".", // 解析非相对模块名称的基目录
+    "paths": {
+      "@/*": ["src/*"] // 配置路径别名，@/* 映射到 src/*
+    }
+  },
+  "include": ["src"], // 包含 src 目录下的所有文件进行编译
+  "references": [
+    {
+      "path": "./tsconfig.node.json" // 引用 tsconfig.node.json，用于构建流程中的特殊类型检查
+    }
+  ]
+}

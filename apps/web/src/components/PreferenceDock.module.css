@@ -1,0 +1,86 @@
+.dock {
+  position: fixed;
+  top: 78px;
+  right: 18px;
+  z-index: 1400;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid var(--app-card-border);
+  border-radius: 999px;
+  background: var(--app-card-bg-strong);
+  box-shadow: var(--app-shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--app-card-border) 78%, transparent);
+  border-radius: 14px;
+  background: color-mix(
+    in srgb,
+    var(--app-button-secondary-bg) 85%,
+    transparent
+  );
+  color: var(--app-text-primary);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+}
+
+.button:hover,
+.button:focus-visible {
+  border-color: var(--app-accent-border);
+  background: var(--app-button-secondary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px
+    color-mix(in srgb, var(--app-accent-border) 18%, transparent);
+  outline: none;
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+}
+
+.badge {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--app-accent-border) 84%, white 16%);
+  color: #fff;
+  font-size: 0.56rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 900px) {
+  .dock {
+    inset: auto 14px 14px 14px;
+    top: auto;
+    justify-content: center;
+  }
+
+  .button {
+    flex: 0 0 auto;
+  }
+}

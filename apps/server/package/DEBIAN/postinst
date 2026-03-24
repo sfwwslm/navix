@@ -1,0 +1,28 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    configure)
+        # 如果用户不存在，则创建系统用户
+        if ! id -u navix >/dev/null 2>&1; then
+            echo "add navix user!"
+            useradd --system --no-create-home --shell /usr/sbin/nologin navix
+        fi
+
+        # 创建数据目录并赋权
+        mkdir -p /var/lib/navix-server
+        chown navix:navix /var/lib/navix-server
+        chmod 755 /var/lib/navix-server
+
+        # 创建日志目录
+        mkdir -p /var/log/navix-server
+        chown navix:navix /var/log/navix-server
+        chmod 755 /var/log/navix-server
+
+        # 重新加载 systemd 并启用启动服务
+        systemctl daemon-reload
+        systemctl enable --now navix-server || true
+        ;;
+esac
+
+exit 0

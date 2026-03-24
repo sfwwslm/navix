@@ -1,0 +1,17 @@
+.icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.iconifyIcon {
+  padding: 10px;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 100%),
+    var(--app-iconify-bg);
+  color: var(--app-iconify-fg);
+  box-shadow:
+    inset 0 0 0 1px var(--app-iconify-border),
+    0 8px 18px rgba(5, 10, 20, 0.16);
+}

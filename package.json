@@ -1,0 +1,32 @@
+{
+  "name": "navix",
+  "private": true,
+  "version": "0.1.0-alpha.1",
+  "type": "module",
+  "scripts": {
+    "tauri": "pnpm --dir apps/desktop tauri",
+    "build": "pnpm --dir apps/desktop build",
+    "build:fast": "pnpm --dir apps/desktop build -- --profile fast-release",
+    "web:dev": "pnpm --dir apps/web dev",
+    "web:build": "pnpm --dir apps/web web:build",
+    "server:dev": "pnpm --dir apps/web web:build && cargo run -p navix-server",
+    "code:stats": "node --experimental-strip-types scripts/count-code-lines.ts",
+    "check": "pnpm --dir apps/desktop check && pnpm --dir apps/web check && pnpm --dir packages/shared-ts check && pnpm --dir packages/shared-ui check",
+    "check:all": "pnpm check && cargo clippy --all-targets --all-features -- -D warnings",
+    "format": "pnpm --dir apps/desktop format && pnpm --dir apps/web format && pnpm --dir packages/shared-ts format && pnpm --dir packages/shared-ui format",
+    "format:all": "pnpm format && cargo fmt"
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-react-refresh": "catalog:",
+    "globals": "catalog:",
+    "jiti": "catalog:",
+    "prettier": "catalog:",
+    "ts-prune": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  },
+  "packageManager": "pnpm@10.28.0"
+}

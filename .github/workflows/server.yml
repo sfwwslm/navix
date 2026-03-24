@@ -1,0 +1,102 @@
+name: Server Publish
+
+env:
+  NODE_VERSION: "24"
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: Version to release
+        required: true
+        type: string
+      release_tag:
+        description: GitHub Release tag
+        required: true
+        type: string
+
+jobs:
+  publish-server:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      DATABASE_URL: sqlite:apps/server/database/navix-server.db
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Verify server version
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual_version=$(awk '
+            /^\[workspace\.package\]/ { in_section = 1; next }
+            /^\[/ { if (in_section) exit }
+            in_section && /version[[:space:]]*=/ {
+              if (match($0, /"[^"]+"/)) {
+                print substr($0, RSTART + 1, RLENGTH - 2)
+                exit
+              }
+            }
+          ' Cargo.toml)
+          if [ "$actual_version" != "${{ inputs.version }}" ]; then
+            echo "server version mismatch: expected ${{ inputs.version }}, got $actual_version" >&2
+            exit 1
+          fi
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libssl-dev libsqlite3-dev
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: server-ubuntu-latest
+          workspaces: |
+            . -> target
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web assets
+        run: pnpm --dir apps/web web:build
+
+      - name: Build server binary
+        run: cargo build --locked --release -p navix-server
+
+      - name: Build Debian package
+        run: bash apps/server/scripts/build_deb.sh
+
+      - name: Prepare release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp target/release/navix-server "dist/navix-server"
+          tar -C dist -czf "dist/navix-server-${{ inputs.version }}-linux-amd64.tar.gz" "navix-server"
+          cp "target/navix-server_${{ inputs.version }}_amd64.deb" "dist/"
+
+      - name: Upload server assets
+        run: |
+          gh release upload "${{ inputs.release_tag }}" \
+            "dist/navix-server-${{ inputs.version }}-linux-amd64.tar.gz" \
+            "dist/navix-server_${{ inputs.version }}_amd64.deb" \
+            --clobber

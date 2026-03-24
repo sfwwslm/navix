@@ -1,0 +1,783 @@
+.controlCenterBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: rgba(6, 10, 18, 0.62);
+  backdrop-filter: blur(14px);
+}
+
+.controlCenterModal {
+  width: min(1120px, calc(100vw - 48px));
+  height: min(720px, calc(100vh - 64px));
+  max-height: min(720px, calc(100vh - 64px));
+  display: flex;
+  flex-direction: column;
+  border-radius: 26px;
+  border: 1px solid var(--app-card-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 26%),
+    var(--app-card-bg-strong);
+  box-shadow: var(--app-shadow-hard);
+  overflow: hidden;
+}
+
+.controlCenterHeading {
+  margin: 0;
+  color: var(--app-text-primary);
+  font-size: 1.1rem;
+  letter-spacing: -0.04em;
+}
+
+.controlCenterHeaderMain {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.controlCenterTabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 22px;
+  border-bottom: 1px solid var(--app-card-border);
+  overflow-x: auto;
+  min-height: 62px;
+  box-sizing: border-box;
+}
+
+.controlCenterTab {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  height: 46px;
+  margin: auto 0;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--app-text-secondary);
+  cursor: pointer;
+  box-sizing: border-box;
+  appearance: none;
+  vertical-align: middle;
+  line-height: 1;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.controlCenterTab:hover,
+.controlCenterTab:focus-visible {
+  border-color: var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.24);
+  color: var(--app-text-primary);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.controlCenterTab[data-active="true"] {
+  border-color: var(--app-accent-border);
+  background: color-mix(in srgb, var(--app-accent-soft) 80%, transparent);
+  color: var(--app-text-primary);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.controlCenterMenuLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 0;
+  line-height: 1;
+  height: 100%;
+}
+
+.controlCenterMenuIcon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  display: block;
+}
+
+.controlCenterMenuTitle {
+  color: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.controlCenterContent {
+  display: flex;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.controlCenterCloseButton {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid var(--app-card-border);
+  background: var(--app-button-secondary-bg);
+  color: var(--app-text-primary);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.controlCenterCloseButton:hover,
+.controlCenterCloseButton:focus-visible {
+  border-color: var(--app-accent-border);
+  background: var(--app-button-secondary-hover);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.controlCenterSidebar {
+  width: 240px;
+  flex: 0 0 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px 18px;
+  border-right: 1px solid var(--app-card-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 32%),
+    rgba(var(--app-surface-rgb), 0.18);
+  box-sizing: border-box;
+}
+
+.controlCenterSidebarHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.controlCenterNav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.controlCenterNavItem {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--app-text-secondary);
+  cursor: pointer;
+  appearance: none;
+  box-sizing: border-box;
+  text-align: left;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.controlCenterNavItem:hover,
+.controlCenterNavItem:focus-visible {
+  border-color: var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.24);
+  color: var(--app-text-primary);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.controlCenterNavItem[data-active="true"] {
+  border-color: var(--app-accent-border);
+  background: color-mix(in srgb, var(--app-accent-soft) 80%, transparent);
+  color: var(--app-text-primary);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.controlCenterMain {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.controlCenterContentBody {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 20px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sectionOverview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.24);
+  box-shadow: var(--app-shadow-soft);
+}
+
+.overviewIdentity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.overviewAvatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.4);
+  color: var(--app-text-primary);
+  font-weight: 800;
+}
+
+.overviewAvatar svg {
+  width: 18px;
+  height: 18px;
+}
+
+.overviewIdentityText {
+  min-width: 0;
+}
+
+.overviewLabel {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.overviewTitle {
+  margin: 4px 0 0;
+  color: var(--app-text-primary);
+  font-size: 1.22rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.sectionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.sectionCard {
+  border-radius: 18px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.26);
+  box-shadow: 0 18px 42px rgba(5, 10, 20, 0.18);
+  backdrop-filter: blur(18px);
+  padding: 16px 18px;
+}
+
+.sectionCardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sectionCardHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sectionCardTitle {
+  margin: 0;
+  color: var(--app-text-primary);
+  font-size: 1rem;
+}
+
+.sectionCardText {
+  margin: 0;
+  color: var(--app-text-muted);
+  line-height: 1.55;
+}
+
+.sectionForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.sectionForm label {
+  color: var(--app-text-secondary);
+  font-size: 0.92rem;
+}
+
+.sectionInput {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.34);
+  color: var(--app-text-primary);
+  box-sizing: border-box;
+}
+
+.sectionInput:focus {
+  border-color: var(--app-accent-border);
+  box-shadow: 0 0 0 4px var(--app-accent-soft);
+  outline: none;
+}
+
+.sectionButton,
+.sectionSecondaryButton,
+.sectionDangerButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--app-accent-border);
+  background: linear-gradient(135deg, var(--app-accent), #60a5fa);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.sectionSecondaryButton {
+  border-color: var(--app-card-border);
+  background: var(--app-button-secondary-bg);
+  color: var(--app-text-primary);
+  font-weight: 600;
+}
+
+.sectionDangerButton {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: transparent;
+  color: #fca5a5;
+  font-weight: 600;
+}
+
+.sectionButton:hover,
+.sectionSecondaryButton:hover,
+.sectionDangerButton:hover,
+.sectionButton:focus-visible,
+.sectionSecondaryButton:focus-visible,
+.sectionDangerButton:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: var(--app-shadow-soft);
+  outline: none;
+}
+
+.sectionMessage,
+.sectionNotice,
+.sectionError {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--app-card-border);
+  color: var(--app-text-primary);
+}
+
+.sectionMessage {
+  background: rgba(var(--app-surface-rgb), 0.24);
+}
+
+.sectionNotice {
+  background: rgba(22, 163, 74, 0.12);
+  border-color: rgba(22, 163, 74, 0.34);
+  color: #bbf7d0;
+}
+
+.sectionError {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.34);
+  color: #fecdd3;
+}
+
+.accountSwitchList {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.accountSwitchItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.16);
+}
+
+.accountSwitchIdentity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.accountSwitchAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--app-accent-soft) 80%, transparent);
+  color: var(--app-text-primary);
+  font-weight: 700;
+}
+
+.accountSwitchText {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.accountSwitchName {
+  color: var(--app-text-primary);
+  font-weight: 700;
+}
+
+.accountSwitchMeta {
+  color: var(--app-text-muted);
+  font-size: 0.84rem;
+}
+
+.accountSwitchActions {
+  flex: 0 0 auto;
+}
+
+.preferencesList {
+  display: grid;
+  gap: 12px;
+}
+
+.preferenceCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.2);
+}
+
+.preferenceInfo {
+  min-width: 0;
+}
+
+.preferenceLabel {
+  margin: 0;
+  color: var(--app-text-primary);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.preferenceValue {
+  margin: 4px 0 0;
+  color: var(--app-text-muted);
+}
+
+.preferenceActions {
+  flex: 0 0 auto;
+}
+
+.preferenceSliderGroup {
+  flex: 1 1 280px;
+  display: grid;
+  gap: 8px;
+}
+
+.preferenceSlider {
+  width: 100%;
+  accent-color: var(--app-accent);
+}
+
+.preferenceSliderScale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--app-text-muted);
+  font-size: 0.8rem;
+}
+
+.adminUsersCard {
+  min-width: 0;
+}
+
+.adminCreateCard {
+  display: grid;
+  gap: 14px;
+}
+
+.adminCreateFormInline {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+  margin-top: 0;
+}
+
+.adminCreateField {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.adminCreateAction {
+  display: flex;
+  align-items: flex-end;
+}
+
+.adminCreateAction button {
+  min-width: 132px;
+}
+
+.adminUserList {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+  transition: opacity 0.2s ease;
+}
+
+.adminUserList[data-refreshing="true"] {
+  opacity: 0.72;
+}
+
+.adminUserItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--app-card-border);
+  background: rgba(var(--app-surface-rgb), 0.16);
+}
+
+.adminUserMain {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.adminUserIdentity {
+  min-width: 0;
+}
+
+.adminUserNameRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.adminUserName {
+  color: var(--app-text-primary);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.adminUserRole {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(var(--app-surface-rgb), 0.3);
+  color: var(--app-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.adminUserMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  color: var(--app-text-muted);
+  font-size: 0.88rem;
+}
+
+.adminActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.adminDeletedActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mutedText {
+  color: var(--app-text-muted);
+}
+
+.confirmBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(6, 10, 18, 0.38);
+  backdrop-filter: blur(10px);
+}
+
+.confirmModal {
+  width: min(440px, calc(100vw - 32px));
+  border-radius: 18px;
+  border: 1px solid var(--app-card-border);
+  background: var(--app-card-bg-strong);
+  box-shadow: var(--app-shadow-hard);
+  color: var(--app-text-primary);
+  padding: 20px;
+}
+
+.confirmTitle {
+  margin: 0 0 8px;
+  font-size: 1.12rem;
+}
+
+.confirmText {
+  margin: 0 0 16px;
+  color: var(--app-text-secondary);
+  line-height: 1.65;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .controlCenterBackdrop {
+    padding: 14px;
+  }
+
+  .controlCenterModal {
+    width: calc(100vw - 28px);
+    height: calc(100vh - 28px);
+    max-height: calc(100vh - 28px);
+  }
+
+  .controlCenterContent {
+    flex-direction: column;
+  }
+
+  .controlCenterSidebar {
+    width: 100%;
+    flex: 0 0 auto;
+    padding: 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--app-card-border);
+  }
+
+  .controlCenterSidebarHeader {
+    align-items: center;
+  }
+
+  .controlCenterNav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .controlCenterNavItem {
+    width: auto;
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .controlCenterContentBody {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .sectionOverview,
+  .preferenceCard,
+  .sectionCardHeaderRow,
+  .accountSwitchItem,
+  .adminUserItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .adminCreateFormInline {
+    grid-template-columns: 1fr;
+  }
+
+  .preferenceSliderGroup {
+    width: 100%;
+  }
+
+  .adminCreateAction {
+    width: 100%;
+  }
+
+  .adminCreateAction button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .sectionGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .confirmActions {
+    flex-direction: column-reverse;
+  }
+
+  .confirmActions button {
+    width: 100%;
+  }
+}
