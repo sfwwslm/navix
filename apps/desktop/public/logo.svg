@@ -1,30 +1,30 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bgA" x1="84" y1="48" x2="424" y2="464" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#F8FBFF"/>
-      <stop offset="0.58" stop-color="#EEF5FF"/>
-      <stop offset="1" stop-color="#E7F0FF"/>
+    <linearGradient id="bgLarge3" x1="66" y1="30" x2="446" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDFEFF"/>
+      <stop offset="0.56" stop-color="#EFF6FF"/>
+      <stop offset="1" stop-color="#E4EEFF"/>
     </linearGradient>
-    <linearGradient id="ringA" x1="150" y1="120" x2="384" y2="390" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#7DEBFF"/>
-      <stop offset="0.55" stop-color="#6D8CFF"/>
+    <linearGradient id="ringLarge3" x1="132" y1="92" x2="404" y2="416" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7BEAFF"/>
+      <stop offset="0.5" stop-color="#6D8CFF"/>
       <stop offset="1" stop-color="#F472B6"/>
     </linearGradient>
-    <linearGradient id="coreA" x1="194" y1="164" x2="328" y2="348" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#7DEBFF"/>
-      <stop offset="0.6" stop-color="#6D8CFF"/>
+    <linearGradient id="coreLarge3" x1="180" y1="146" x2="340" y2="364" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#86EEFF"/>
+      <stop offset="0.52" stop-color="#6F8EFF"/>
       <stop offset="1" stop-color="#F472B6"/>
     </linearGradient>
   </defs>
-  <rect x="32" y="32" width="448" height="448" rx="120" fill="url(#bgA)"/>
-  <circle cx="256" cy="256" r="162" stroke="url(#ringA)" stroke-width="24" opacity="0.95"/>
-  <circle cx="256" cy="256" r="108" stroke="#BFD0EA" stroke-width="12" opacity="0.52"/>
-  <circle cx="256" cy="256" r="54" fill="url(#coreA)"/>
-  <circle cx="256" cy="256" r="26" fill="#F9FBFF"/>
-  <path d="M256 94C300 94 340 112 370 142" stroke="#F9FBFF" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
-  <path d="M142 370C112 340 94 300 94 256" stroke="#7DEBFF" stroke-width="10" stroke-linecap="round" opacity="0.5"/>
-  <circle cx="352" cy="160" r="18" fill="#F472B6"/>
-  <circle cx="158" cy="272" r="13" fill="#7DEBFF" opacity="0.9"/>
-  <circle cx="336" cy="352" r="11" fill="#6D8CFF" opacity="0.95"/>
-  <path d="M352 160C327 186 312 208 301 236" stroke="#F472B6" stroke-width="10" stroke-linecap="round" opacity="0.32"/>
+  <rect x="18" y="18" width="476" height="476" rx="128" fill="url(#bgLarge3)"/>
+  <circle cx="256" cy="256" r="180" stroke="url(#ringLarge3)" stroke-width="30" opacity="0.99"/>
+  <circle cx="256" cy="256" r="126" stroke="#BED1EA" stroke-width="14" opacity="0.56"/>
+  <circle cx="256" cy="256" r="82" fill="url(#coreLarge3)"/>
+  <circle cx="256" cy="256" r="38" fill="#FCFDFF"/>
+  <path d="M256 76C310 76 354 98 390 134" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" opacity="0.8"/>
+  <path d="M124 384C92 350 76 306 76 256" stroke="#7DEBFF" stroke-width="12" stroke-linecap="round" opacity="0.52"/>
+  <circle cx="366" cy="150" r="21" fill="#F472B6"/>
+  <circle cx="150" cy="292" r="14" fill="#7DEBFF" opacity="0.95"/>
+  <circle cx="344" cy="366" r="13" fill="#6D8CFF" opacity="0.98"/>
+  <path d="M366 150C336 180 316 210 300 248" stroke="#F472B6" stroke-width="11" stroke-linecap="round" opacity="0.34"/>
 </svg>
