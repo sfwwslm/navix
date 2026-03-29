@@ -4,7 +4,10 @@ use crate::api::response::ApiResponse;
 use crate::{
     api::routes::jwt::Claims,
     error::{ApiError, ApiResult},
-    models::user::{ChangePasswordPayload, CreateUserPayload, UpdateUsernamePayload},
+    models::{
+        user::{ChangePasswordPayload, CreateUserPayload, UpdateUsernamePayload},
+        website::UpdateWebsitePayload,
+    },
     services::user_service,
 };
 
@@ -62,6 +65,12 @@ impl FieldValidatable for CreateUserPayload {
 impl FieldValidatable for UpdateUsernamePayload {
     fn validate_fields(&self) -> shared_rs::dto::api::ValidationDetails {
         UpdateUsernamePayload::validate_fields(self)
+    }
+}
+
+impl FieldValidatable for UpdateWebsitePayload {
+    fn validate_fields(&self) -> shared_rs::dto::api::ValidationDetails {
+        UpdateWebsitePayload::validate_fields(self)
     }
 }
 

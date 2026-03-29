@@ -29,6 +29,35 @@
   outline: none;
 }
 
+.primaryButton {
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--app-accent-border);
+  background: var(--app-accent-soft);
+  color: var(--app-text-primary);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.primaryButton:hover,
+.primaryButton:focus-visible {
+  background: color-mix(in srgb, var(--app-accent-soft) 78%, transparent);
+  border-color: var(--app-accent-border);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.primaryButton:disabled,
+.ghostButton:disabled,
+.contextMenuButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .stateCard {
   background: var(--app-card-bg-strong);
   border: 1px solid var(--app-card-border);
@@ -276,6 +305,16 @@
   outline: none;
 }
 
+.dangerButton {
+  color: #fda4af;
+}
+
+.dangerButton:hover,
+.dangerButton:focus-visible {
+  background: rgba(248, 113, 113, 0.16);
+  color: #fecdd3;
+}
+
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -319,7 +358,7 @@
 
 .modalIdentityText {
   display: grid;
-  gap: 4px;
+  gap: 2px;
 }
 
 .modalEyebrow {
@@ -328,12 +367,6 @@
   font-size: 0.78rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.modalSubtitle {
-  margin: 0;
-  color: var(--app-text-secondary);
-  line-height: 1.6;
 }
 
 .modalCloseButton {
@@ -403,8 +436,37 @@
 
 .modalActions {
   display: flex;
+  gap: 10px;
   justify-content: flex-end;
   margin-top: 16px;
+}
+
+.formField {
+  display: grid;
+  gap: 8px;
+}
+
+.formControl {
+  width: 100%;
+  border: 1px solid var(--app-card-border);
+  border-radius: 14px;
+  background: rgba(var(--app-surface-rgb), 0.14);
+  color: var(--app-text-primary);
+  padding: 12px 14px;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.formControl:focus {
+  border-color: var(--app-accent-border);
+  background: rgba(var(--app-surface-rgb), 0.22);
+  outline: none;
+}
+
+.formTextarea {
+  min-height: 112px;
+  resize: vertical;
 }
 
 .iconBubble {
@@ -497,5 +559,9 @@
 
   .modalCard {
     padding: 18px;
+  }
+
+  .modalActions {
+    flex-direction: column-reverse;
   }
 }

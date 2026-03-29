@@ -282,6 +282,13 @@ importers:
         version: 4.1.11
 
   packages/shared-ui:
+    dependencies:
+      react:
+        specifier: 'catalog:'
+        version: 19.2.3
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.2.3(react@19.2.3)
     devDependencies:
       '@types/react':
         specifier: 'catalog:'

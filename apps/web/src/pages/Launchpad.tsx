@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+import { SelectField } from "@navix/shared-ui";
 import { apiFetch, apiFetchResponse, isAuthError } from "../api";
 import { clearUserAccessToken, getUserAccessToken } from "../auth/tokenStore";
 import DynamicIcon from "../components/DynamicIcon";
@@ -11,6 +12,7 @@ import type { Claims } from "@navix/shared-ts";
 
 interface LaunchpadWebsite {
   uuid: string;
+  group_uuid: string;
   title: string;
   url: string;
   url_lan?: string | null;
@@ -35,6 +37,17 @@ type SiteContextMenuState = {
   y: number;
 };
 
+type SiteEditFormState = {
+  uuid: string;
+  group_uuid: string;
+  title: string;
+  url: string;
+  url_lan: string;
+  default_icon: string;
+  local_icon_path: string | null;
+  description: string;
+};
+
 const DefaultIcon = ({ label, alt }: { label: string; alt: string }) => (
   <div className={styles.defaultIcon}>
     <svg viewBox="0 0 48 48" role="img" aria-label={alt}>
@@ -57,6 +70,34 @@ const DefaultIcon = ({ label, alt }: { label: string; alt: string }) => (
   </div>
 );
 
+/**
+ * 把服务端返回的站点数据映射成编辑弹窗使用的表单状态。
+ *
+ * 这里保留 default_icon / local_icon_path，即使当前弹窗不暴露图标字段，
+ * 保存时也能继续透传已有值，避免用户编辑其他字段时把图标意外清空。
+ */
+function toEditForm(site: LaunchpadWebsite): SiteEditFormState {
+  return {
+    uuid: site.uuid,
+    group_uuid: site.group_uuid,
+    title: site.title,
+    url: site.url,
+    url_lan: site.url_lan ?? "",
+    default_icon: site.default_icon ?? "",
+    local_icon_path: site.local_icon_path ?? null,
+    description: site.description ?? "",
+  };
+}
+
+function isValidUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 const LaunchpadPage = () => {
   const { launchpadSidebarEnabled, t } = useI18n();
   const [launchpad, setLaunchpad] = useState<LaunchpadGroup[]>([]);
@@ -65,53 +106,61 @@ const LaunchpadPage = () => {
   const [contextMenu, setContextMenu] = useState<SiteContextMenuState | null>(
     null,
   );
-  const [editSite, setEditSite] = useState<LaunchpadWebsite | null>(null);
+  const [editSite, setEditSite] = useState<SiteEditFormState | null>(null);
   const [activeGroupUuid, setActiveGroupUuid] = useState<string | null>(null);
   const [sidebarHovered, setSidebarHovered] = useState(false);
   const [userUuid, setUserUuid] = useState<string | null>(null);
   const [iconErrors, setIconErrors] = useState<Record<string, boolean>>({});
   const [iconUrls, setIconUrls] = useState<Record<string, string>>({});
+  const [savingSite, setSavingSite] = useState(false);
+  const [deletingSiteUuid, setDeletingSiteUuid] = useState<string | null>(null);
   const iconUrlsRef = useRef<Record<string, string>>({});
   const groupRefs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
   const { launchpadMode: mode } = useOutletContext<AppShellOutletContext>();
 
-  useEffect(() => {
+  /**
+   * 拉取导航基础数据和当前用户信息。
+   *
+   * 站点本地图标依赖 userUuid 拼接下载地址，因此这里先拿 welcome，
+   * 再加载 launchpad 列表，后续图标 effect 才能补齐本地图标展示。
+   */
+  const loadLaunchpad = useCallback(async () => {
     const token = getUserAccessToken();
     if (!token) {
       void navigate("/login");
       return;
     }
 
-    const fetchBasic = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        // 获取用户信息用于本地图标路径
-        const welcomeResp = await apiFetch<Claims>("/api/v1/welcome", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUserUuid(welcomeResp.data?.sub ?? null);
+    setLoading(true);
+    setError(null);
 
-        const response = await apiFetch<LaunchpadGroup[]>("/api/v1/launchpad", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setLaunchpad(response.data || []);
-      } catch (err) {
-        if (isAuthError(err)) {
-          clearUserAccessToken();
-          void navigate("/login");
-          return;
-        }
-        console.error(err);
-        setError(t("launchpad.fetchFailed"));
-      } finally {
-        setLoading(false);
+    try {
+      const welcomeResp = await apiFetch<Claims>("/api/v1/welcome", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUserUuid(welcomeResp.data?.sub ?? null);
+
+      const response = await apiFetch<LaunchpadGroup[]>("/api/v1/launchpad", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setLaunchpad(response.data || []);
+    } catch (err) {
+      if (isAuthError(err)) {
+        clearUserAccessToken();
+        void navigate("/login");
+        return;
       }
-    };
-
-    void fetchBasic();
+      console.error(err);
+      setError(t("launchpad.fetchFailed"));
+    } finally {
+      setLoading(false);
+    }
   }, [navigate, t]);
+
+  useEffect(() => {
+    void loadLaunchpad();
+  }, [loadLaunchpad]);
 
   const sortedLaunchpad = useMemo(() => {
     const byOrderThen = <T extends { sort_order?: number | null }>(
@@ -138,6 +187,15 @@ const LaunchpadPage = () => {
 
     return sortedGroups;
   }, [launchpad]);
+
+  const groupOptions = useMemo(
+    () =>
+      sortedLaunchpad.map((group) => ({
+        uuid: group.uuid,
+        name: group.name,
+      })),
+    [sortedLaunchpad],
+  );
 
   useEffect(() => {
     iconUrlsRef.current = iconUrls;
@@ -274,18 +332,129 @@ const LaunchpadPage = () => {
     };
   }, [activeGroupUuid, launchpadSidebarEnabled, sortedLaunchpad]);
 
+  const getSiteUrlForMode = (site: LaunchpadWebsite) =>
+    mode === "lan" && site.url_lan ? site.url_lan : site.url;
+
   const handleOpenSite = (site: LaunchpadWebsite) => {
-    const targetUrl = mode === "lan" && site.url_lan ? site.url_lan : site.url;
-    window.open(targetUrl, "_blank", "noopener,noreferrer");
+    window.open(getSiteUrlForMode(site), "_blank", "noopener,noreferrer");
   };
 
   const handleContextMenu = (e: React.MouseEvent, site: LaunchpadWebsite) => {
     e.preventDefault();
     setContextMenu({
       site,
-      x: Math.min(e.clientX, window.innerWidth - 188),
-      y: Math.min(e.clientY, window.innerHeight - 64),
+      x: Math.min(e.clientX, window.innerWidth - 220),
+      y: Math.min(e.clientY, window.innerHeight - 260),
     });
+  };
+
+  const handleDeleteSite = async (site: LaunchpadWebsite) => {
+    const token = getUserAccessToken();
+    if (!token) {
+      void navigate("/login");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      t("launchpad.deleteConfirm", { title: site.title }),
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingSiteUuid(site.uuid);
+    try {
+      await apiFetch(`/api/v1/launchpad/items/${site.uuid}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setContextMenu(null);
+      if (editSite?.uuid === site.uuid) {
+        setEditSite(null);
+      }
+      await loadLaunchpad();
+    } catch (err) {
+      if (isAuthError(err)) {
+        clearUserAccessToken();
+        void navigate("/login");
+        return;
+      }
+      console.error(err);
+      window.alert(t("launchpad.deleteFailed"));
+    } finally {
+      setDeletingSiteUuid(null);
+    }
+  };
+
+  /**
+   * 提交当前编辑中的站点。
+   *
+   * 这条链路只暴露本期规划的基础字段，但请求体会继续带上已有的 default_icon，
+   * 避免现有图标资产在本期 UI 收敛后被覆盖掉。
+   */
+  const handleSaveSite = async () => {
+    if (!editSite) {
+      return;
+    }
+
+    if (!editSite.title.trim()) {
+      window.alert(t("launchpad.titleRequired"));
+      return;
+    }
+    if (!editSite.url.trim()) {
+      window.alert(t("launchpad.urlRequired"));
+      return;
+    }
+    if (!isValidUrl(editSite.url.trim())) {
+      window.alert(t("launchpad.invalidUrl"));
+      return;
+    }
+    if (editSite.url_lan.trim() && !isValidUrl(editSite.url_lan.trim())) {
+      window.alert(t("launchpad.invalidLanUrl"));
+      return;
+    }
+    if (!editSite.group_uuid) {
+      window.alert(t("launchpad.groupRequired"));
+      return;
+    }
+
+    const token = getUserAccessToken();
+    if (!token) {
+      void navigate("/login");
+      return;
+    }
+
+    setSavingSite(true);
+    try {
+      await apiFetch(`/api/v1/launchpad/items/${editSite.uuid}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: editSite.title,
+          url: editSite.url,
+          url_lan: editSite.url_lan,
+          group_uuid: editSite.group_uuid,
+          default_icon: editSite.default_icon,
+          description: editSite.description,
+        }),
+      });
+      setEditSite(null);
+      setContextMenu(null);
+      await loadLaunchpad();
+    } catch (err) {
+      if (isAuthError(err)) {
+        clearUserAccessToken();
+        void navigate("/login");
+        return;
+      }
+      console.error(err);
+      window.alert(t("launchpad.saveFailed"));
+    } finally {
+      setSavingSite(false);
+    }
   };
 
   return (
@@ -459,13 +628,24 @@ const LaunchpadPage = () => {
           <button
             type="button"
             className={styles.contextMenuButton}
-            data-ui="launchpad-edit-site-button"
+            data-ui="launchpad-context-edit"
             onClick={() => {
-              setEditSite(contextMenu.site);
+              setEditSite(toEditForm(contextMenu.site));
               setContextMenu(null);
             }}
           >
             {t("launchpad.edit")}
+          </button>
+          <button
+            type="button"
+            className={`${styles.contextMenuButton} ${styles.dangerButton}`}
+            data-ui="launchpad-context-delete"
+            onClick={() => void handleDeleteSite(contextMenu.site)}
+            disabled={deletingSiteUuid === contextMenu.site.uuid}
+          >
+            {deletingSiteUuid === contextMenu.site.uuid
+              ? t("launchpad.deleting")
+              : t("launchpad.delete")}
           </button>
         </div>
       ) : null}
@@ -474,11 +654,15 @@ const LaunchpadPage = () => {
         <div
           className={`launchpad-site-modal-overlay ${styles.modalOverlay}`}
           data-ui="launchpad-site-modal-overlay"
-          onClick={() => setEditSite(null)}
+          onClick={() => {
+            if (!savingSite) {
+              setEditSite(null);
+            }
+          }}
         >
           <div
             className={`launchpad-site-modal ${styles.modalCard}`}
-            data-ui="launchpad-site-modal"
+            data-ui="launchpad-site-editor"
             data-entity="launchpad-site"
             data-site-uuid={editSite.uuid}
             onClick={(e) => e.stopPropagation()}
@@ -502,7 +686,7 @@ const LaunchpadPage = () => {
                     }
                     fallback={
                       <DefaultIcon
-                        label={editSite.title.charAt(0).toUpperCase()}
+                        label={editSite.title.charAt(0).toUpperCase() || "?"}
                         alt={t("launchpad.defaultIcon")}
                       />
                     }
@@ -511,9 +695,6 @@ const LaunchpadPage = () => {
                 <div className={styles.modalIdentityText}>
                   <p className={styles.modalEyebrow}>{t("launchpad.edit")}</p>
                   <p className={styles.siteTitle}>{editSite.title}</p>
-                  <p className={styles.modalSubtitle}>
-                    {t("launchpad.editDescription")}
-                  </p>
                 </div>
               </div>
               <button
@@ -521,6 +702,7 @@ const LaunchpadPage = () => {
                 className={styles.modalCloseButton}
                 onClick={() => setEditSite(null)}
                 aria-label={t("common.close")}
+                disabled={savingSite}
               >
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path
@@ -533,47 +715,101 @@ const LaunchpadPage = () => {
               </button>
             </header>
             <div className={styles.modalBody}>
-              <section className={styles.modalSection}>
-                <p className={styles.modalLabel}>
-                  {t("launchpad.currentModeLink")}
-                </p>
-                <p className={styles.modalUrl}>
-                  {mode === "lan" && editSite.url_lan
-                    ? editSite.url_lan
-                    : editSite.url}
-                </p>
-              </section>
-              <section className={styles.modalSectionGrid}>
-                <div className={styles.modalField}>
-                  <p className={styles.modalLabel}>
-                    {t("launchpad.editTarget")}
-                  </p>
-                  <p className={styles.modalUrl}>{editSite.url}</p>
-                </div>
-                <div className={styles.modalField}>
-                  <p className={styles.modalLabel}>
-                    {t("launchpad.editLanTarget")}
-                  </p>
-                  <p className={styles.modalUrl}>
-                    {editSite.url_lan || t("common.unknown")}
-                  </p>
-                </div>
-              </section>
-              <section className={styles.modalSection}>
-                <p className={styles.modalLabel}>
+              <div className={styles.modalSectionGrid}>
+                <label className={styles.formField}>
+                  <span className={styles.modalLabel}>
+                    {t("launchpad.group")}
+                  </span>
+                  <SelectField
+                    value={editSite.group_uuid}
+                    dataUi="launchpad-group-select"
+                    options={groupOptions.map((group) => ({
+                      value: group.uuid,
+                      label: group.name,
+                    }))}
+                    onChange={(value) =>
+                      setEditSite((prev) =>
+                        prev ? { ...prev, group_uuid: value } : prev,
+                      )
+                    }
+                  />
+                </label>
+                <label className={styles.formField}>
+                  <span className={styles.modalLabel}>
+                    {t("launchpad.siteTitle")}
+                  </span>
+                  <input
+                    className={styles.formControl}
+                    value={editSite.title}
+                    onChange={(event) =>
+                      setEditSite((prev) =>
+                        prev ? { ...prev, title: event.target.value } : prev,
+                      )
+                    }
+                  />
+                </label>
+              </div>
+              <label className={styles.formField}>
+                <span className={styles.modalLabel}>
+                  {t("launchpad.editTarget")}
+                </span>
+                <input
+                  className={styles.formControl}
+                  value={editSite.url}
+                  placeholder="https://example.com"
+                  onChange={(event) =>
+                    setEditSite((prev) =>
+                      prev ? { ...prev, url: event.target.value } : prev,
+                    )
+                  }
+                />
+              </label>
+              <label className={styles.formField}>
+                <span className={styles.modalLabel}>
+                  {t("launchpad.editLanTarget")}
+                </span>
+                <input
+                  className={styles.formControl}
+                  value={editSite.url_lan}
+                  placeholder="http://192.168.1.100"
+                  onChange={(event) =>
+                    setEditSite((prev) =>
+                      prev ? { ...prev, url_lan: event.target.value } : prev,
+                    )
+                  }
+                />
+              </label>
+              <label className={styles.formField}>
+                <span className={styles.modalLabel}>
                   {t("launchpad.description")}
-                </p>
-                <p className={styles.modalDesc}>
-                  {editSite.description || t("launchpad.emptyDescription")}
-                </p>
-              </section>
+                </span>
+                <textarea
+                  className={`${styles.formControl} ${styles.formTextarea}`}
+                  value={editSite.description}
+                  onChange={(event) =>
+                    setEditSite((prev) =>
+                      prev
+                        ? { ...prev, description: event.target.value }
+                        : prev,
+                    )
+                  }
+                />
+              </label>
             </div>
             <div className={styles.modalActions}>
               <button
                 className={styles.ghostButton}
                 onClick={() => setEditSite(null)}
+                disabled={savingSite}
               >
-                {t("common.close")}
+                {t("common.cancel")}
+              </button>
+              <button
+                className={styles.primaryButton}
+                onClick={() => void handleSaveSite()}
+                disabled={savingSite}
+              >
+                {savingSite ? t("launchpad.saving") : t("launchpad.save")}
               </button>
             </div>
           </div>

@@ -2,7 +2,9 @@ use crate::api::handlers::admin_handler::{
     cleanup_user_handler, create_user_handler, delete_user_handler, disable_user_handler,
     enable_user_handler, list_users_handler,
 };
-use crate::api::handlers::navigation_handler::get_navigation_handler;
+use crate::api::handlers::navigation_handler::{
+    delete_navigation_item_handler, get_navigation_handler, update_navigation_item_handler,
+};
 use crate::api::handlers::sync_handler::{
     icon_download_handler, icon_upload_handler, sync_chunk_handler, sync_complete_handler,
     sync_start_handler,
@@ -70,6 +72,14 @@ pub fn protected_api_v1_protected() -> Router<Arc<AppState>> {
     Router::new()
         .route("/auth/status", get(check_auth_status_handler))
         .route("/launchpad", get(get_navigation_handler))
+        .route(
+            "/launchpad/items/{uuid}",
+            put(update_navigation_item_handler),
+        )
+        .route(
+            "/launchpad/items/{uuid}",
+            delete(delete_navigation_item_handler),
+        )
         .route("/welcome", get(welcome))
         .route("/user/username", put(change_username_handler))
         .route("/user/password", put(change_password_handler))

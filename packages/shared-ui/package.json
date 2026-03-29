@@ -19,5 +19,12 @@
     "prettier": "catalog:",
     "typescript": "catalog:"
   },
-  "dependencies": {}
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "dependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
 }

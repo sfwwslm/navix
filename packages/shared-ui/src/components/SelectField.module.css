@@ -1,0 +1,98 @@
+.root {
+  position: relative;
+}
+
+.trigger {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--app-card-border);
+  border-radius: 14px;
+  background: rgba(var(--app-surface-rgb), 0.14);
+  color: var(--app-text-primary);
+  padding: 12px 42px 12px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.trigger:hover,
+.trigger:focus-visible,
+.trigger[data-open="true"] {
+  border-color: var(--app-accent-border);
+  background: rgba(var(--app-surface-rgb), 0.22);
+  outline: none;
+}
+
+.trigger[data-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.label {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  color: var(--app-text-muted);
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+
+.trigger[data-open="true"] + .chevron {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 2200;
+  display: grid;
+  gap: 6px;
+  max-height: 260px;
+  overflow: auto;
+  padding: 8px;
+  border-radius: 16px;
+  border: 1px solid var(--app-card-border);
+  background: color-mix(in srgb, var(--app-card-bg-strong) 94%, transparent);
+  box-shadow: var(--app-shadow-hard);
+  backdrop-filter: blur(20px);
+}
+
+.option {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--app-text-primary);
+  text-align: left;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.option:hover,
+.option:focus-visible {
+  background: rgba(var(--app-surface-rgb), 0.28);
+  outline: none;
+}
+
+.option[data-active="true"] {
+  background: color-mix(in srgb, var(--app-accent-soft) 76%, transparent);
+  color: var(--app-text-primary);
+}
