@@ -4,6 +4,7 @@
   "version": "0.1.0-alpha.1",
   "type": "module",
   "scripts": {
+    "version:set": "node scripts/set-version.mjs",
     "tauri": "pnpm --dir apps/desktop tauri",
     "build": "pnpm --dir apps/desktop build",
     "build:fast": "pnpm --dir apps/desktop build -- --profile fast-release",
