@@ -111,6 +111,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, isOpen }) => {
   return (
     <AppModal isOpen={isOpen} onClose={onClose} title={t("account.title")}>
       <Form
+        autoComplete="off"
         onSubmit={(e) => {
           void handleSubmit(e);
         }}
@@ -122,9 +123,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, isOpen }) => {
               id="server-ip"
               className="server-ip-input"
               type="text"
+              name="navix_server_ip"
               value={serverIp}
               onChange={(e) => setServerIp(e.target.value)}
               placeholder="e.g., 127.0.0.1"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="none"
+              spellCheck={false}
             />
           </FormGroup>
           <FormGroup>
@@ -133,9 +139,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, isOpen }) => {
               id="server-port"
               className="server-port-input"
               type="number"
+              name="navix_server_port"
               value={serverPort}
               onChange={(e) => setServerPort(e.target.value)}
               placeholder="e.g., 9990"
+              autoComplete="off"
             />
           </FormGroup>
         </ServerConfigGrid>
@@ -157,10 +165,15 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, isOpen }) => {
             id="username"
             className="username-input"
             type="text"
+            name="navix_login_user"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
             autoFocus
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="none"
+            spellCheck={false}
           />
         </FormGroup>
         <FormGroup>
@@ -169,9 +182,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, isOpen }) => {
             id="password"
             className="password-input"
             type="password"
+            name="navix_login_secret"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            autoComplete="new-password"
           />
         </FormGroup>
 
