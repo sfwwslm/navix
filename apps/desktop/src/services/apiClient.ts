@@ -56,6 +56,26 @@ interface RequestOptions extends Omit<RequestInit, "body"> {
   [key: string]: unknown;
 }
 
+function isRefreshableAuthError(
+  response: Response,
+  errorBody: unknown,
+): boolean {
+  if (response.status === 401) {
+    return true;
+  }
+
+  if (!errorBody || typeof errorBody !== "object") {
+    return false;
+  }
+
+  const record = errorBody as { code?: unknown };
+  return (
+    response.status === 400 &&
+    (record.code === APP_ERROR_CODES.AuthTokenExpired ||
+      record.code === APP_ERROR_CODES.AuthTokenInvalid)
+  );
+}
+
 /**
  * 一个健壮的 fetch 封装，它在每次调用时动态读取认证信息。
  * @template T - 期望的响应数据类型。
@@ -122,30 +142,29 @@ export async function apiClient<T>(
 
     // 6. 检查 HTTP 响应状态
     if (!response.ok) {
-      // 如果是 401 错误且不是重试请求，尝试刷新令牌
-      if (
-        response.status === 401 &&
-        !isRetry &&
-        activeUser?.refreshToken &&
-        activeUser?.uuid !== ANONYMOUS_USER_UUID
-      ) {
-        log.info("检测到 401 错误，尝试刷新令牌...");
-        try {
-          await refreshActiveSession(activeUser.uuid);
-          // 重新发起请求
-          return await apiClient(endpoint, options, true);
-        } catch (refreshError) {
-          log.error(`令牌刷新失败: ${toErrorMessage(refreshError)}`);
-          // 刷新失败，继续执行后面的错误抛出逻辑
-        }
-      }
-
       let errorBody: unknown;
       try {
         errorBody = await response.json();
       } catch {
         errorBody = await response.text();
       }
+
+      // 命中 token 失效类错误时，允许走一次统一 refresh 恢复流程。
+      if (
+        !isRetry &&
+        activeUser?.refreshToken &&
+        activeUser?.uuid !== ANONYMOUS_USER_UUID &&
+        isRefreshableAuthError(response, errorBody)
+      ) {
+        log.info("检测到鉴权错误，尝试刷新令牌...");
+        try {
+          await refreshActiveSession(activeUser.uuid);
+          return await apiClient(endpoint, options, true);
+        } catch (refreshError) {
+          log.error(`令牌刷新失败: ${toErrorMessage(refreshError)}`);
+        }
+      }
+
       throw appExceptionFromResponse(errorBody, "server", {
         code: APP_ERROR_CODES.InternalServerError,
         message: `服务器响应错误: ${response.statusText}`,

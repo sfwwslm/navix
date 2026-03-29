@@ -28,7 +28,7 @@ use std::fmt::Display;
 use std::net::SocketAddr;
 use std::sync::{Arc, LazyLock};
 
-const ACCESS_TOKEN_LIFETIME_MINUTES: i64 = 120;
+const ACCESS_TOKEN_LIFETIME_MINUTES: i64 = 24 * 60;
 pub const SUBJECT_TYPE_USER: &str = "user";
 
 static KEYS: LazyLock<Keys> = LazyLock::new(|| {

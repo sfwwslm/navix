@@ -149,6 +149,27 @@ export function clearUserAccessToken(): void {
   writeToken(USER_REFRESH_TOKEN_KEY, null);
 }
 
+/**
+ * 清理当前已失效的登录会话，并移除对应的已保存账号条目。
+ * 仅用于 refresh 失败等“当前会话已确认不可恢复”的场景。
+ */
+export function clearInvalidUserSession(): void {
+  const activeAccessToken = getUserAccessToken();
+  const activeRefreshToken = getUserRefreshToken();
+  const claims = decodeTokenClaims(activeAccessToken);
+
+  if (claims?.sub) {
+    removeStoredAccountSession(claims.sub);
+  } else if (activeRefreshToken) {
+    const next = readSessions().filter(
+      (item) => item.refreshToken !== activeRefreshToken,
+    );
+    writeSessions(next);
+  }
+
+  clearUserAccessToken();
+}
+
 export function clearAllAccessTokens(): void {
   clearUserAccessToken();
 }

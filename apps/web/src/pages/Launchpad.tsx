@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { apiFetch, isAuthError } from "../api";
+import { apiFetch, apiFetchResponse, isAuthError } from "../api";
 import { clearUserAccessToken, getUserAccessToken } from "../auth/tokenStore";
 import DynamicIcon from "../components/DynamicIcon";
 import { useI18n } from "../i18n/useI18n";
@@ -163,7 +163,7 @@ const LaunchpadPage = () => {
       await Promise.all(
         sitesWithLocalIcons.map(async (site) => {
           try {
-            const response = await fetch(
+            const response = await apiFetchResponse(
               `/api/v1/icons/download/${userUuid}/${site.local_icon_path}`,
               {
                 headers: { Authorization: `Bearer ${token}` },

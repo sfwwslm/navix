@@ -11,6 +11,7 @@ import {
   ANONYMOUS_USER_UUID,
   type User,
   getActiveUserFromStorage,
+  setUserLoginStatus,
 } from "./user";
 
 type ActiveUserListener = (user: User | null) => void;
@@ -54,6 +55,20 @@ function toAnonymousUser(): User {
     username: ANONYMOUS_USER,
     isLoggedIn: 1,
   };
+}
+
+/**
+ * 将已失效的本地会话降级为匿名用户。
+ * refresh token 失效后必须清理 access/refresh token，并撤销本地登录态。
+ */
+async function clearInvalidSession(user: RefreshableUser): Promise<void> {
+  await saveUser({
+    ...user,
+    token: undefined,
+    refreshToken: undefined,
+  });
+  await setUserLoginStatus(user.uuid, false);
+  setActiveSessionUser(toAnonymousUser());
 }
 
 /**
@@ -182,6 +197,7 @@ async function performTokenRefresh(
     } catch {
       errorBody = await response.text();
     }
+    await clearInvalidSession(activeUser);
     throw appExceptionFromResponse(errorBody, "server", {
       code: APP_ERROR_CODES.AuthTokenExpired,
       message: "会话刷新失败，请重新登录。",
