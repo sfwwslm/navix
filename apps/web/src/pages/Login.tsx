@@ -1,9 +1,12 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ApiRequestError, apiFetchRaw } from "../api";
 import { apiFetch } from "../api";
-import { setCurrentUserSession } from "../auth/tokenStore";
+import {
+  clearInvalidUserSession,
+  getUserRefreshToken,
+  setCurrentUserSession,
+} from "../auth/tokenStore";
 import AuthLayout from "../components/AuthLayout";
 import { useI18n } from "../i18n/useI18n";
 
@@ -27,6 +30,9 @@ const LoginPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [bootstrapLoading, setBootstrapLoading] = useState(true);
   const [initialized, setInitialized] = useState(true);
+  const [restoringSession, setRestoringSession] = useState(() =>
+    Boolean(getUserRefreshToken()),
+  );
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -66,6 +72,47 @@ const LoginPage = () => {
       active = false;
     };
   }, [t]);
+
+  useEffect(() => {
+    let active = true;
+
+    const restoreSession = async () => {
+      const refreshToken = getUserRefreshToken();
+      if (!refreshToken) {
+        if (active) {
+          setRestoringSession(false);
+        }
+        return;
+      }
+
+      try {
+        const data = await apiFetchRaw<AuthTokenResponse>("/api/refresh", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refresh_token: refreshToken }),
+        });
+
+        if (data.access_token && data.refresh_token) {
+          setCurrentUserSession(data.access_token, data.refresh_token);
+          void navigate("/launchpad", { replace: true });
+          return;
+        }
+
+        clearInvalidUserSession();
+      } catch {
+        clearInvalidUserSession();
+      } finally {
+        if (active) {
+          setRestoringSession(false);
+        }
+      }
+    };
+
+    void restoreSession();
+    return () => {
+      active = false;
+    };
+  }, [navigate]);
 
   /**
    * 提交登录表单并按角色跳转到对应页面。
@@ -125,6 +172,20 @@ const LoginPage = () => {
   const submitLabel = initialized
     ? t("auth.loginButton")
     : t("auth.bootstrapButton");
+
+  if (restoringSession) {
+    return (
+      <AuthLayout
+        pageName="login"
+        cardTitle={cardTitle}
+        cardDescription={cardDescription}
+      >
+        <div className="message info" data-ui="login-verifying">
+          {t("auth.verifying")}
+        </div>
+      </AuthLayout>
+    );
+  }
 
   return (
     <AuthLayout
