@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ApiRequestError, apiFetchRaw } from "../api";
 import { apiFetch } from "../api";
-import {
-  clearInvalidUserSession,
-  getUserRefreshToken,
-  setCurrentUserSession,
-} from "../auth/tokenStore";
+import { setCurrentUserSession } from "../auth/tokenStore";
 import AuthLayout from "../components/AuthLayout";
 import { useI18n } from "../i18n/useI18n";
 
@@ -21,7 +17,9 @@ type BootstrapStatusResponse = {
 };
 
 /**
- * 登录页面组件
+ * 登录页面组件。
+ *
+ * 冷启动会话恢复已前移到路由入口，这里只负责初始化状态检查和显式登录流程。
  */
 const LoginPage = () => {
   const { t } = useI18n();
@@ -30,9 +28,6 @@ const LoginPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [bootstrapLoading, setBootstrapLoading] = useState(true);
   const [initialized, setInitialized] = useState(true);
-  const [restoringSession, setRestoringSession] = useState(() =>
-    Boolean(getUserRefreshToken()),
-  );
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,6 +38,9 @@ const LoginPage = () => {
   useEffect(() => {
     let active = true;
 
+    /**
+     * 读取初始化状态，决定当前页面展示首次初始化还是普通登录表单。
+     */
     const fetchBootstrapStatus = async () => {
       setBootstrapLoading(true);
       setError(null);
@@ -72,47 +70,6 @@ const LoginPage = () => {
       active = false;
     };
   }, [t]);
-
-  useEffect(() => {
-    let active = true;
-
-    const restoreSession = async () => {
-      const refreshToken = getUserRefreshToken();
-      if (!refreshToken) {
-        if (active) {
-          setRestoringSession(false);
-        }
-        return;
-      }
-
-      try {
-        const data = await apiFetchRaw<AuthTokenResponse>("/api/refresh", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ refresh_token: refreshToken }),
-        });
-
-        if (data.access_token && data.refresh_token) {
-          setCurrentUserSession(data.access_token, data.refresh_token);
-          void navigate("/launchpad", { replace: true });
-          return;
-        }
-
-        clearInvalidUserSession();
-      } catch {
-        clearInvalidUserSession();
-      } finally {
-        if (active) {
-          setRestoringSession(false);
-        }
-      }
-    };
-
-    void restoreSession();
-    return () => {
-      active = false;
-    };
-  }, [navigate]);
 
   /**
    * 提交登录表单并按角色跳转到对应页面。
@@ -163,6 +120,9 @@ const LoginPage = () => {
     void handleSubmit(event);
   };
 
+  /**
+   * 根据系统初始化状态切换登录页标题和提交按钮文案。
+   */
   const cardTitle = bootstrapLoading
     ? t("common.loading")
     : initialized
@@ -172,20 +132,6 @@ const LoginPage = () => {
   const submitLabel = initialized
     ? t("auth.loginButton")
     : t("auth.bootstrapButton");
-
-  if (restoringSession) {
-    return (
-      <AuthLayout
-        pageName="login"
-        cardTitle={cardTitle}
-        cardDescription={cardDescription}
-      >
-        <div className="message info" data-ui="login-verifying">
-          {t("auth.verifying")}
-        </div>
-      </AuthLayout>
-    );
-  }
 
   return (
     <AuthLayout

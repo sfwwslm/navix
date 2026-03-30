@@ -68,6 +68,94 @@
   backdrop-filter: blur(18px);
 }
 
+.bootstrapStateCard,
+.bootstrapGroupTitle,
+.bootstrapGroupBadge,
+.bootstrapIconBubble,
+.bootstrapSiteTitle,
+.bootstrapActionGhost {
+  position: relative;
+  overflow: hidden;
+}
+
+.bootstrapStateCard::after,
+.bootstrapGroupTitle::after,
+.bootstrapGroupBadge::after,
+.bootstrapIconBubble::after,
+.bootstrapSiteTitle::after,
+.bootstrapActionGhost::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.12),
+    transparent
+  );
+  animation: bootstrapShimmer 1.3s ease-in-out infinite;
+}
+
+.bootstrapStateCard {
+  min-height: 54px;
+}
+
+.bootstrapGroupCard {
+  min-height: 236px;
+}
+
+.bootstrapGroupTitle {
+  width: 132px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(var(--app-surface-rgb), 0.22);
+}
+
+.bootstrapGroupBadge {
+  width: 56px;
+  height: 28px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--app-accent-soft) 68%, transparent);
+  border: 1px solid var(--app-accent-border);
+}
+
+.bootstrapSiteCard {
+  cursor: default;
+}
+
+.bootstrapSiteCard:hover,
+.bootstrapSiteCard:focus-visible {
+  transform: none;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.bootstrapIconBubble {
+  background: rgba(var(--app-surface-rgb), 0.24);
+}
+
+.bootstrapSiteTitle {
+  width: 72px;
+  height: 12px;
+  border-radius: 999px;
+  margin: 0 auto;
+  background: rgba(var(--app-surface-rgb), 0.22);
+}
+
+.bootstrapActionGhost {
+  cursor: default;
+  pointer-events: none;
+}
+
+.bootstrapActionGhost:hover,
+.bootstrapActionGhost:focus-visible {
+  transform: none;
+  box-shadow: var(--app-shadow-soft);
+  border-color: var(--app-card-border);
+  background: color-mix(in srgb, var(--app-card-bg-strong) 84%, transparent);
+}
+
 .error {
   border-color: rgba(248, 113, 113, 0.5);
   color: #ef9ca5;
@@ -530,6 +618,12 @@
 .siteUrl,
 .siteDesc {
   display: none;
+}
+
+@keyframes bootstrapShimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 @media (max-width: 640px) {
