@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "type-check": "pnpm exec tsc -p tsconfig.json --noEmit",
-    "lint": "pnpm exec eslint --config ../../eslint.config.ts src --max-warnings=0",
+    "type-check": "pnpm -w tsc -p packages/shared-ui/tsconfig.json --noEmit",
+    "lint": "pnpm -w eslint --config eslint.config.ts packages/shared-ui/src --max-warnings=0",
     "check": "pnpm run type-check && pnpm run lint",
-    "format": "pnpm exec prettier --write src/"
+    "format": "pnpm -w prettier --write packages/shared-ui/src/"
   },
   "exports": {
     ".": "./src/index.ts"
