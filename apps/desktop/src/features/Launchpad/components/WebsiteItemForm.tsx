@@ -179,6 +179,9 @@ const WebsiteItemForm: React.FC<WebsiteItemFormProps> = ({
           value={item.title || ""}
           onChange={(e) => onItemChange("title", e.target.value)}
           required
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
         />
       </FormGroup>
 
@@ -204,6 +207,9 @@ const WebsiteItemForm: React.FC<WebsiteItemFormProps> = ({
           onChange={(e) => onItemChange("url", e.target.value)}
           required
           placeholder="https://example.com"
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
         />
       </FormGroup>
 
@@ -228,6 +234,9 @@ const WebsiteItemForm: React.FC<WebsiteItemFormProps> = ({
           value={item.url_lan || ""}
           onChange={(e) => onItemChange("url_lan", e.target.value)}
           placeholder="http://192.168.1.100"
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
         />
       </FormGroup>
 
@@ -307,6 +316,9 @@ const WebsiteItemForm: React.FC<WebsiteItemFormProps> = ({
               value={item.default_icon || ""}
               onChange={(e) => onItemChange("default_icon", e.target.value)}
               placeholder="grommet-icons:edge"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
             />
           </IconDisplayWrapper>
         )}
@@ -337,6 +349,9 @@ const WebsiteItemForm: React.FC<WebsiteItemFormProps> = ({
             value={item.background_color?.toUpperCase() || ""}
             onChange={(e) => onItemChange("background_color", e.target.value)}
             placeholder={theme.colors.surface}
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
           />
         </ColorInputWrapper>
       </FormGroup>
@@ -372,6 +387,9 @@ const WebsiteItemForm: React.FC<WebsiteItemFormProps> = ({
           value={item.description || ""}
           onChange={(e) => onItemChange("description", e.target.value)}
           placeholder={t("launchpad.addDescription")}
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck={false}
         />
       </FullWidthFormGroup>
 

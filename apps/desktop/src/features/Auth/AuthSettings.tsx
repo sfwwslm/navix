@@ -280,6 +280,9 @@ const AuthSettings: React.FC = () => {
                 value={serverAddress}
                 placeholder={t("account.serverAddressPlaceholder")}
                 onChange={(e) => setServerAddress(e.target.value)}
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
               />
               <UpdateButton
                 variant="secondary"

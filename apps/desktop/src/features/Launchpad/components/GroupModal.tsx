@@ -121,6 +121,9 @@ const GroupModal: React.FC<GroupModalProps> = ({
             onChange={(e) => setName(e.target.value)}
             required
             placeholder={t("launchpad.groupPlaceholder")}
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
           />
         </FormGroup>
         <FormGroup>
@@ -133,6 +136,9 @@ const GroupModal: React.FC<GroupModalProps> = ({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder={t("launchpad.groupDescriptionPlaceholder")}
+            autoComplete="off"
+            autoCorrect="off"
+            spellCheck={false}
           />
         </FormGroup>
         <Button type="submit">{t("launchpad.addGroupSave")}</Button>

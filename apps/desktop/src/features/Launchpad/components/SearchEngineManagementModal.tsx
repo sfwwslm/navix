@@ -245,6 +245,9 @@ const SearchEngineManagementModal: React.FC<
               placeholder={t("launchpad.searchEngine.exampleBing")}
               value={name}
               onChange={(e) => setName(e.target.value)}
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
             />
           </FormGroup>
           <FormGroup>
@@ -256,6 +259,9 @@ const SearchEngineManagementModal: React.FC<
               placeholder={t("launchpad.searchEngine.exampleUrl")}
               value={urlTemplate}
               onChange={(e) => setUrlTemplate(e.target.value)}
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
             />
             <HintText>
               {t("launchpad.searchEngine.searchPlaceholderHint")}

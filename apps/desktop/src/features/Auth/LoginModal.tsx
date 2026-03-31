@@ -144,6 +144,8 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, isOpen }) => {
               onChange={(e) => setServerPort(e.target.value)}
               placeholder="e.g., 9990"
               autoComplete="off"
+              autoCorrect="off"
+              spellCheck={false}
             />
           </FormGroup>
         </ServerConfigGrid>
@@ -186,7 +188,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, isOpen }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            autoComplete="new-password"
+            autoComplete="off"
           />
         </FormGroup>
 
