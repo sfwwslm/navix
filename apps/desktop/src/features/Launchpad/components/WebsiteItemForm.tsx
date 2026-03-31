@@ -272,6 +272,7 @@ const WebsiteItemForm: React.FC<WebsiteItemFormProps> = ({
           <IconDisplayWrapper>
             <LocalIconPreview>
               <DynamicIcon
+                key={item.local_icon_path}
                 defaultIcon=""
                 localIconPath={item.local_icon_path}
                 onLoadError={() => setIsIconInvalid(true)}

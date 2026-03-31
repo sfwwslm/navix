@@ -74,10 +74,10 @@ const DynamicIcon: React.FC<DynamicIconProps> = ({
     let ignore = false;
     // 当 localIconPath 或刷新信号变化时，重新解析图标路径
     const resolveIconPath = async () => {
-      await Promise.resolve();
       if (ignore) return;
 
       setLocalIconFailed(false);
+      setFullIconSrc(null); // 开始解析新路径时重置，避免渲染旧路径导致 onError 触发
 
       if (localIconPath) {
         try {
