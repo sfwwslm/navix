@@ -502,6 +502,14 @@ const ControlCenter = ({
     }
   };
 
+  const handleRemoveStoredAccount = (session: StoredAccountSession) => {
+    setStoredAccounts(removeStoredAccountSession(session.userUuid));
+    setAccountSwitchMessage({
+      text: t("auth.accountRemoved"),
+      type: "success",
+    });
+  };
+
   return (
     <div
       className={`control-center-backdrop ${styles.controlCenterBackdrop}`}
@@ -805,6 +813,21 @@ const ControlCenter = ({
                                 </div>
                               </div>
                               <div className={styles.accountSwitchActions}>
+                                {!isCurrent ? (
+                                  <button
+                                    type="button"
+                                    className={styles.sectionDangerButton}
+                                    data-ui="control-center-remove-saved-account-button"
+                                    disabled={
+                                      switchingAccountUuid === account.userUuid
+                                    }
+                                    onClick={() => {
+                                      handleRemoveStoredAccount(account);
+                                    }}
+                                  >
+                                    {t("auth.removeSavedAccount")}
+                                  </button>
+                                ) : null}
                                 <button
                                   type="button"
                                   className={styles.sectionSecondaryButton}

@@ -95,10 +95,12 @@ export const enUSMessages: MessageTree = {
     accountSwitched: "Account switched. Refreshing the page.",
     accountSwitchFailed:
       "Failed to switch accounts. Please sign in to that account again.",
+    accountRemoved: "Saved account removed.",
     savedAccounts: "Saved accounts",
     noSavedAccounts: "No saved accounts available yet.",
     currentAccount: "Current account",
     savedSession: "Saved session",
+    removeSavedAccount: "Remove",
     adminLoginFailed: "Admin sign-in failed",
     requestFailed: "Network request failed. Please try again later.",
   },
