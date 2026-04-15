@@ -40,6 +40,7 @@ const SessionBootstrap = () => {
       const refreshToken = getUserRefreshToken();
       if (!refreshToken) {
         if (active) {
+          setRestored(false);
           setReady(true);
         }
         return;
@@ -75,6 +76,8 @@ const SessionBootstrap = () => {
       active = false;
     };
   }, []);
+
+  const hasRefreshToken = Boolean(getUserRefreshToken());
 
   if (!ready) {
     return (
@@ -150,6 +153,7 @@ const SessionBootstrap = () => {
 
   if (
     restored &&
+    hasRefreshToken &&
     (location.pathname === "/" || location.pathname === "/login")
   ) {
     // 只有落在登录入口时才需要替换到业务首页，避免打断用户刷新业务页。
