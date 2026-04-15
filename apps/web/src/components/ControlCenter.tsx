@@ -20,6 +20,8 @@ import styles from "./ControlCenter.module.css";
 
 export type ControlCenterSection = "account" | "preferences" | "admin";
 
+const TRANSIENT_MESSAGE_TIMEOUT_MS = 3000;
+
 interface AdminUser {
   uuid: string;
   username: string;
@@ -41,6 +43,29 @@ type AuthTokenResponse = {
   token_type: string;
   refresh_token: string;
 };
+
+/**
+ * 在消息显示一段时间后自动清空，避免提示长期残留在局部界面中。
+ */
+function useAutoDismissState<T>(
+  value: T | null,
+  onClear: () => void,
+  enabled = true,
+): void {
+  useEffect(() => {
+    if (!enabled || value === null) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      onClear();
+    }, TRANSIENT_MESSAGE_TIMEOUT_MS);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [enabled, onClear, value]);
+}
 
 type ControlCenterProps = {
   isOpen: boolean;
@@ -206,6 +231,55 @@ const ControlCenter = ({
 
     setStoredAccounts(getStoredAccountSessions());
   }, [activeSection, isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      return;
+    }
+
+    setUsernameMessage(null);
+    setPasswordMessage(null);
+    setAdminError(null);
+    setAdminMessage(null);
+    setAccountSwitchMessage(null);
+    setConfirmState(null);
+  }, [isOpen]);
+
+  useAutoDismissState(
+    usernameMessage,
+    () => {
+      setUsernameMessage(null);
+    },
+    isOpen,
+  );
+  useAutoDismissState(
+    passwordMessage,
+    () => {
+      setPasswordMessage(null);
+    },
+    isOpen,
+  );
+  useAutoDismissState(
+    adminError,
+    () => {
+      setAdminError(null);
+    },
+    isOpen,
+  );
+  useAutoDismissState(
+    adminMessage,
+    () => {
+      setAdminMessage(null);
+    },
+    isOpen,
+  );
+  useAutoDismissState(
+    accountSwitchMessage,
+    () => {
+      setAccountSwitchMessage(null);
+    },
+    isOpen,
+  );
 
   const sectionItems = useMemo(() => {
     const items: Array<{
