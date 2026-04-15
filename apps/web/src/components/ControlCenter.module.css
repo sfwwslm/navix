@@ -116,9 +116,21 @@
 
 .controlCenterContent {
   display: flex;
-  height: 100%;
+  flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
+}
+
+.controlCenterTopbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--app-card-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 80%),
+    rgba(var(--app-surface-rgb), 0.18);
 }
 
 .controlCenterCloseButton {
@@ -151,20 +163,12 @@
   flex: 0 0 240px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
   padding: 20px 18px;
   border-right: 1px solid var(--app-card-border);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 32%),
     rgba(var(--app-surface-rgb), 0.18);
   box-sizing: border-box;
-}
-
-.controlCenterSidebarHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
 }
 
 .controlCenterNav {
@@ -725,10 +729,6 @@
     border-bottom: 1px solid var(--app-card-border);
   }
 
-  .controlCenterSidebarHeader {
-    align-items: center;
-  }
-
   .controlCenterNav {
     flex-direction: row;
     flex-wrap: wrap;
@@ -743,6 +743,10 @@
   .controlCenterContentBody {
     padding-left: 16px;
     padding-right: 16px;
+  }
+
+  .controlCenterTopbar {
+    padding: 16px;
   }
 
   .sectionOverview,

@@ -363,6 +363,12 @@ const ControlCenter = ({
       : backgroundName === "aurora"
         ? t("preferences.backgroundAurora")
         : t("preferences.backgroundOrbital");
+  const currentSectionTitle =
+    activeSection === "preferences"
+      ? t("controlCenter.preferencesTitle")
+      : activeSection === "admin"
+        ? t("controlCenter.adminTitle")
+        : t("controlCenter.accountTitle");
 
   if (!isOpen) {
     return null;
@@ -599,6 +605,39 @@ const ControlCenter = ({
         aria-modal="true"
         aria-label={t("nav.controlCenter")}
       >
+        <header
+          className={styles.controlCenterTopbar}
+          data-slot="control-center-topbar"
+        >
+          <div className={styles.controlCenterHeaderMain}>
+            <h2 className={styles.controlCenterHeading}>
+              {currentSectionTitle}
+            </h2>
+          </div>
+          <button
+            type="button"
+            className={`control-center-close-button ${styles.controlCenterCloseButton}`}
+            data-ui="control-center-close-button"
+            onClick={onClose}
+            aria-label={t("common.close")}
+            title={t("common.close")}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              width="18"
+              height="18"
+              aria-hidden="true"
+            >
+              <path
+                d="m6 6 12 12M18 6 6 18"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </header>
         <section
           className={`control-center-content ${styles.controlCenterContent}`}
           data-slot="control-center-content"
@@ -607,40 +646,6 @@ const ControlCenter = ({
             className={styles.controlCenterSidebar}
             data-slot="control-center-sidebar"
           >
-            <header
-              className={styles.controlCenterSidebarHeader}
-              data-slot="control-center-sidebar-header"
-            >
-              <div className={styles.controlCenterHeaderMain}>
-                <h2 className={styles.controlCenterHeading}>
-                  {t("nav.controlCenter")}
-                </h2>
-              </div>
-              <button
-                type="button"
-                className={`control-center-close-button ${styles.controlCenterCloseButton}`}
-                data-ui="control-center-close-button"
-                onClick={onClose}
-                aria-label={t("common.close")}
-                title={t("common.close")}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  width="18"
-                  height="18"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="m6 6 12 12M18 6 6 18"
-                    stroke="currentColor"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            </header>
-
             <nav
               className={styles.controlCenterNav}
               aria-label={t("nav.controlCenter")}
