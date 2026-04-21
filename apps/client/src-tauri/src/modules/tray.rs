@@ -116,7 +116,7 @@ pub fn create(app: &mut tauri::App) -> tauri::Result<()> {
     let menu = MenuItem::with_id(app, "quit", "退出", true, None::<&str>)?;
 
     TrayIconBuilder::with_id("main_tray")
-        .tooltip("Vust")
+        .tooltip("Navix")
         .icon(app.default_window_icon().unwrap().clone())
         .menu(&Menu::with_items(app, &[&menu])?)
         .show_menu_on_left_click(false)
