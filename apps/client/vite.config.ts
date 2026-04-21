@@ -2,7 +2,6 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import generouted from "@generouted/react-router/plugin";
 import pkg from "./package.json";
-import { visualizer } from "rollup-plugin-visualizer";
 import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
@@ -12,7 +11,7 @@ const host = process.env.TAURI_DEV_HOST;
 
 const changelogContent = fs.readFileSync(
   path.resolve(__dirname, "../../CHANGELOG.md"),
-  "utf-8"
+  "utf-8",
 );
 
 // --- Git 信息获取 ---
@@ -28,20 +27,7 @@ try {
 
 // https://vitejs.dev/config/
 export default defineConfig(() => ({
-  plugins: [
-    react({
-      babel: {
-        plugins: ["babel-plugin-react-compiler"],
-      },
-    }),
-    generouted(),
-    visualizer({
-      open: false, // 自动打开一个图形化报告页面，看到具体哪个模块占了多大空间。
-      filename: "dist/stats.html",
-      gzipSize: true,
-      brotliSize: true,
-    }),
-  ],
+  plugins: [react(), generouted()],
   resolve: {
     alias: {
       "@": "/src",
