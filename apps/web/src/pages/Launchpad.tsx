@@ -138,7 +138,11 @@ const LaunchpadPage = () => {
   }
 
   // 额外处理 activeGroupUuid 为空但列表不为空的初始情况
-  if (launchpadSidebarEnabled && !activeGroupUuid && sortedLaunchpad.length > 0) {
+  if (
+    launchpadSidebarEnabled &&
+    !activeGroupUuid &&
+    sortedLaunchpad.length > 0
+  ) {
     setActiveGroupUuid(sortedLaunchpad[0].uuid);
   }
 

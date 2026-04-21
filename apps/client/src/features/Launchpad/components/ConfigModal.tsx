@@ -259,7 +259,11 @@ const ConfigModal: React.FC<NavigationConfigModalProps> = ({
 
       const dataToSave: Partial<WebsiteGroup> = { ...groupData };
       if (!dataToSave.uuid) {
-        dataToSave.sort_order = groups.length;
+        const maxSortOrder = groups.reduce(
+          (max, g) => Math.max(max, g.sort_order || 0),
+          0,
+        );
+        dataToSave.sort_order = maxSortOrder + 1;
         dataToSave.user_uuid = activeUser.uuid;
       }
 
@@ -364,7 +368,12 @@ const ConfigModal: React.FC<NavigationConfigModalProps> = ({
       setGroups((items) => {
         const oldIndex = items.findIndex((item) => item.uuid === active.id);
         const newIndex = items.findIndex((item) => item.uuid === over.id);
-        const newOrderedGroups = arrayMove(items, oldIndex, newIndex);
+        const newOrderedGroups = arrayMove(items, oldIndex, newIndex).map(
+          (group, index) => ({
+            ...group,
+            sort_order: index + 1,
+          }),
+        );
         void launchpadDb.updateGroupsOrder(newOrderedGroups);
         setDataChanged(true);
         return newOrderedGroups;

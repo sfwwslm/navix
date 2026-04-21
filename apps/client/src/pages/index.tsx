@@ -233,7 +233,16 @@ const LaunchpadPageContent: React.FC = () => {
         scrollPosRef.current = scrollContainerRef.current.scrollTop;
       }
       const dataToSave = { ...itemData };
-      if (!dataToSave.uuid) {
+
+      // 如果是新项，或者是修改了分组的项，都需要重新计算 sort_order
+      // 找出原 item（如果是编辑的话）
+      const originalItem = itemData.uuid
+        ? items.find((i) => i.uuid === itemData.uuid)
+        : null;
+      const isGroupChanged =
+        originalItem && originalItem.group_uuid !== dataToSave.group_uuid;
+
+      if (!dataToSave.uuid || isGroupChanged) {
         if (!activeUser?.uuid) {
           showAlert(
             t("launchpad.saveItemMissingUserTitle"),
@@ -242,11 +251,20 @@ const LaunchpadPageContent: React.FC = () => {
           return;
         }
         dataToSave.user_uuid = activeUser.uuid;
-        const itemsInGroup = items.filter(
-          (i) => i.group_uuid === dataToSave.group_uuid,
+
+        // 计算目标分组中的最大 sort_order
+        const itemsInTargetGroup = items.filter(
+          (i) =>
+            i.group_uuid === dataToSave.group_uuid &&
+            i.uuid !== dataToSave.uuid,
         );
-        dataToSave.sort_order = itemsInGroup.length;
+        const maxSortOrder = itemsInTargetGroup.reduce(
+          (max, i) => Math.max(max, i.sort_order || 0),
+          0,
+        );
+        dataToSave.sort_order = maxSortOrder + 1;
       }
+
       await launchpadDb.saveItem(dataToSave);
       await loadData();
     },
@@ -298,7 +316,12 @@ const LaunchpadPageContent: React.FC = () => {
           return currentItems;
         }
 
-        const newOrderedItems = arrayMove(currentItems, oldIndex, newIndex);
+        const newOrderedItems = arrayMove(currentItems, oldIndex, newIndex).map(
+          (item, index) => ({
+            ...item,
+            sort_order: index + 1,
+          }),
+        );
 
         void launchpadDb.updateItemsOrder(newOrderedItems);
         return newOrderedItems;
