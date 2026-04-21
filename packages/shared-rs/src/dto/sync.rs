@@ -1,4 +1,4 @@
-//! 同步链路 DTO：用于 desktop <-> tauri <-> server 全链路数据交换。
+//! 同步链路 DTO：用于 client <-> tauri <-> server 全链路数据交换。
 
 use crate::dto::api::ValidationDetails;
 use serde::{Deserialize, Serialize};

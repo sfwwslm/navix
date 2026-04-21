@@ -113,7 +113,7 @@ export type TelemetryResultStatus = z.infer<typeof telemetryResultStatusSchema>;
 
 export const TelemetrySourceLayer = {
   Web: "web",
-  Desktop: "desktop",
+  Client: "client",
   Server: "server",
   SharedRs: "shared-rs",
 } as const;

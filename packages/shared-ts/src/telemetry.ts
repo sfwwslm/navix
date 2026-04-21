@@ -29,7 +29,7 @@ export interface TelemetryBaseContext {
 }
 
 export interface FrontendTelemetryOptions {
-  app: "desktop" | "web";
+  app: "client" | "web";
   appVersion: string;
   env?: string;
   getBaseContext?: () => TelemetryBaseContext;
@@ -80,8 +80,8 @@ export const sanitizePayload = (payload: TelemetryPayload = {}) => {
   return sanitized;
 };
 
-const sourceAppName = (app: "desktop" | "web") =>
-  app === "desktop" ? "navix-desktop" : "navix-web";
+const sourceAppName = (app: "client" | "web") =>
+  app === "client" ? "navix-client" : "navix-web";
 
 export const createFrontendTelemetryLogger = (
   options: FrontendTelemetryOptions,

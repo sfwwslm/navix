@@ -111,7 +111,7 @@ pub fn build_http_client(http_config: HttpClientConfig) -> Result<Client, String
     let mut headers = header::HeaderMap::new();
     headers.insert(
         header::USER_AGENT,
-        header::HeaderValue::from_str("navix-desktop").unwrap(),
+        header::HeaderValue::from_str("navix-client").unwrap(),
     );
 
     // 添加 token

@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::BTreeMap;
 
-/// 全链路统一事件名；server/desktop/web 必须复用该枚举，避免字符串漂移。
+/// 全链路统一事件名；server/client/web 必须复用该枚举，避免字符串漂移。
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, Eq, PartialEq, Hash)]
 pub enum ObservabilityEvent {
     #[serde(rename = "api.request.completed")]
@@ -102,8 +102,8 @@ impl LogLevel {
 pub enum TelemetrySourceLayer {
     #[serde(rename = "web")]
     Web,
-    #[serde(rename = "desktop")]
-    Desktop,
+    #[serde(rename = "client")]
+    Client,
     #[serde(rename = "server")]
     Server,
     #[serde(rename = "shared-rs")]
@@ -114,7 +114,7 @@ impl TelemetrySourceLayer {
     pub fn as_str(self) -> &'static str {
         match self {
             Self::Web => "web",
-            Self::Desktop => "desktop",
+            Self::Client => "client",
             Self::Server => "server",
             Self::SharedRs => "shared-rs",
         }

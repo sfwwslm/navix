@@ -8,7 +8,7 @@
 - `display_name`：
 - `owner`：
 - `status`：`draft | active | deprecated`
-- `layer`：`web | desktop | server | shared`
+- `layer`：`web | client | server | shared`
 
 ## 事件语义
 

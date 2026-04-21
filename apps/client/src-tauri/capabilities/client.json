@@ -1,5 +1,5 @@
 {
-  "identifier": "desktop-capability",
+  "identifier": "client-capability",
   "platforms": [
     "macOS",
     "windows",

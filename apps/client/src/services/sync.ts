@@ -140,7 +140,7 @@ const isTokenExpiredResponse = (resp?: ApiResponse<unknown>) =>
   !!resp && !resp.success && resp.code === TOKEN_EXPIRED_CODE;
 
 const telemetry = createFrontendTelemetryLogger({
-  app: "desktop",
+  app: "client",
   // app 启动时可再接入真实版本注入；当前保底保证日志结构稳定。
   appVersion: "unknown",
   sink: (record) => {

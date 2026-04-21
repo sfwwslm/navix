@@ -18,7 +18,7 @@ fn close_db_pool(app: &tauri::AppHandle) {
     let db_path = db_file.display().to_string();
 
     crate::modules::telemetry::emit_event(
-        "desktop.db.close_started",
+        "client.db.close_started",
         LogLevel::Info,
         &trace_id,
         BTreeMap::from([("db_path".to_string(), db_path.clone())]),
@@ -31,7 +31,7 @@ fn close_db_pool(app: &tauri::AppHandle) {
     });
 
     crate::modules::telemetry::emit_event(
-        "desktop.db.close_completed",
+        "client.db.close_completed",
         LogLevel::Info,
         &trace_id,
         BTreeMap::from([("db_path".to_string(), db_path)]),

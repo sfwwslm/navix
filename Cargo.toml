@@ -2,7 +2,7 @@
 resolver = "2"
 members = [
     "apps/server",                                  # [Rust/Axum] 后端服务
-    "apps/desktop/src-tauri",                       # [Tauri] 桌面端 Rust 宿主
+    "apps/client/src-tauri",                       # [Tauri] 桌面端 Rust 宿主
     "packages/shared-rs",                           # [Rust] 共享逻辑库
 ]
 
@@ -18,7 +18,7 @@ shared-rs = { path = "packages/shared-rs" }         # 共享逻辑库
 serde = { version = "1.0.228" }                     # 通用序列化/反序列化框架
 serde_json = { version = "1.0.149" }                # JSON 解析与生成
 
-# desktop
+# client
 log = { version = "0.4.28" }                        # 日志
 scraper = { version = "0.24.0" }                    # HTML 解析器
 url = { version = "2.5.7" }                         # URL 解析

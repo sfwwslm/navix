@@ -13,10 +13,10 @@ if (!nextVersion) {
 const jsonFiles = [
   "package.json",
   "apps/web/package.json",
-  "apps/desktop/package.json",
+  "apps/client/package.json",
   "packages/shared-ts/package.json",
   "packages/shared-ui/package.json",
-  "apps/desktop/src-tauri/tauri.conf.json",
+  "apps/client/src-tauri/tauri.conf.json",
 ];
 
 const cargoTomlPath = "Cargo.toml";

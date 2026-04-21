@@ -51,7 +51,7 @@ fn prepare_window_state_for_exit(app_handle: &AppHandle) {
         let window = app_handle.get_webview_window("main").unwrap();
         if let Err(error) = window.hide() {
             telemetry::emit_event(
-                "desktop.tray.exit_failed",
+                "client.tray.exit_failed",
                 LogLevel::Error,
                 &telemetry::ensure_trace_id(),
                 std::collections::BTreeMap::from([(
@@ -102,7 +102,7 @@ pub fn update_tray_menu_items<R: Runtime>(
     tray.set_title(Some(title))?;
 
     telemetry::emit_event(
-        "desktop.tray.updated",
+        "client.tray.updated",
         LogLevel::Info,
         &telemetry::ensure_trace_id(),
         std::collections::BTreeMap::from([("item_count".to_string(), item_refs.len().to_string())]),
@@ -145,7 +145,7 @@ pub fn create(app: &mut tauri::App) -> tauri::Result<()> {
             |app: &tauri::AppHandle, event: MenuEvent| match event.id.as_ref() {
                 "quit" => {
                     telemetry::emit_event(
-                        "desktop.tray.quit_requested",
+                        "client.tray.quit_requested",
                         LogLevel::Info,
                         &telemetry::ensure_trace_id(),
                         std::collections::BTreeMap::new(),
@@ -156,7 +156,7 @@ pub fn create(app: &mut tauri::App) -> tauri::Result<()> {
                         && let Err(err) = window.close()
                     {
                         telemetry::emit_event(
-                            "desktop.tray.exit_failed",
+                            "client.tray.exit_failed",
                             LogLevel::Warn,
                             &telemetry::ensure_trace_id(),
                             std::collections::BTreeMap::from([(
@@ -170,7 +170,7 @@ pub fn create(app: &mut tauri::App) -> tauri::Result<()> {
                 }
                 _ => {
                     telemetry::emit_event(
-                        "desktop.tray.menu_ignored",
+                        "client.tray.menu_ignored",
                         LogLevel::Debug,
                         &telemetry::ensure_trace_id(),
                         std::collections::BTreeMap::from([(
@@ -196,7 +196,7 @@ pub fn listener(app: &mut tauri::App) {
             Ok(payload) => {
                 if let Err(e) = update_tray_menu_items(&app_handle, payload) {
                     telemetry::emit_event(
-                        "desktop.tray.update_failed",
+                        "client.tray.update_failed",
                         LogLevel::Error,
                         &telemetry::ensure_trace_id(),
                         std::collections::BTreeMap::from([("message".to_string(), e.to_string())]),
@@ -206,7 +206,7 @@ pub fn listener(app: &mut tauri::App) {
             }
             Err(e) => {
                 telemetry::emit_event(
-                    "desktop.tray.payload_invalid",
+                    "client.tray.payload_invalid",
                     LogLevel::Warn,
                     &telemetry::ensure_trace_id(),
                     std::collections::BTreeMap::from([("message".to_string(), e.to_string())]),

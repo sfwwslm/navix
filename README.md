@@ -13,7 +13,7 @@ Navix 是一个以桌面端为核心的 monorepo 项目，当前包含：
 
 ### 桌面端
 
-桌面端位于 `apps/desktop`，当前主要能力包括：
+桌面端位于 `apps/client`，当前主要能力包括：
 
 - 导航面板：网站分组、网站项管理、拖拽排序、WAN/LAN 地址切换、元数据抓取、书签导入、自定义搜索引擎
 - 账户体系：匿名用户、多账户切换、登录状态管理、删除账户本地数据
@@ -47,7 +47,7 @@ Navix 是一个以桌面端为核心的 monorepo 项目，当前包含：
 ```text
 navix/
 ├── apps/
-│   ├── desktop/             # Tauri 桌面客户端
+│   ├── client/             # Tauri 桌面客户端
 │   │   ├── src/             # React 界面层
 │   │   └── src-tauri/       # Rust 宿主、数据库、invoke、托盘等
 │   ├── server/              # Rust/Axum 服务端
@@ -179,6 +179,6 @@ cargo test --workspace
 ## 文档索引
 
 - [CHANGELOG.md](https://github.com/sfwwslm/navix/blob/main/CHANGELOG.md)
-- [桌面端文档](https://github.com/sfwwslm/navix/blob/main/docs/desktop-client.md)
+- [客户端文档](https://github.com/sfwwslm/navix/blob/main/docs/client-app.md)
 - [服务端文档](https://github.com/sfwwslm/navix/blob/main/docs/server.md)
 - [可观测性文档](https://github.com/sfwwslm/navix/blob/main/docs/observability.md)

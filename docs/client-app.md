@@ -1,8 +1,8 @@
-# Navix 桌面客户端
+# Navix 客户端
 
 ## 概述
 
-Navix 桌面客户端位于 `apps/desktop`，基于 Tauri v2、React 19、TypeScript 与本地 SQLite 构建。
+Navix 客户端位于 `apps/client`，基于 Tauri v2、React 19、TypeScript 与本地 SQLite 构建。
 
 它提供导航面板、账户能力、服务端同步和基础应用设置等功能。
 
@@ -40,10 +40,10 @@ Navix 桌面客户端位于 `apps/desktop`，基于 Tauri v2、React 19、TypeSc
 
 ## 架构分层
 
-桌面端代码主要分为两层：
+客户端代码主要分为两层：
 
-- `apps/desktop/src`：React 界面、状态管理、页面与前端服务
-- `apps/desktop/src-tauri`：Tauri 宿主、数据库、命令处理、托盘与本地能力
+- `apps/client/src`：React 界面、状态管理、页面与前端服务
+- `apps/client/src-tauri`：Tauri 宿主、数据库、命令处理、托盘与本地能力
 
 共享模块包括：
 

@@ -37,7 +37,7 @@ jobs:
         run: |
           set -euo pipefail
           input_version="${{ inputs.version }}"
-          desktop_version=$(node -e "const fs=require('fs'); const cfg=JSON.parse(fs.readFileSync('apps/desktop/src-tauri/tauri.conf.json','utf8')); process.stdout.write(cfg.version);")
+          client_version=$(node -e "const fs=require('fs'); const cfg=JSON.parse(fs.readFileSync('apps/client/src-tauri/tauri.conf.json','utf8')); process.stdout.write(cfg.version);")
           workspace_version=$(awk '
             /^\[workspace\.package\]/ { in_section = 1; next }
             /^\[/ { if (in_section) exit }
@@ -49,8 +49,8 @@ jobs:
             }
           ' Cargo.toml)
 
-          if [ "$desktop_version" != "$input_version" ]; then
-            echo "desktop version mismatch: expected $input_version, got $desktop_version" >&2
+          if [ "$client_version" != "$input_version" ]; then
+            echo "client version mismatch: expected $input_version, got $client_version" >&2
             exit 1
           fi
 
@@ -91,13 +91,13 @@ jobs:
 
           gh release create "$tag" --title "$name" --notes "See CHANGELOG.md for release notes." "${flags[@]}"
 
-  desktop:
+  client:
     needs:
       - prepare
       - create-release
     permissions:
       contents: write
-    uses: ./.github/workflows/desktop.yml
+    uses: ./.github/workflows/client.yml
     secrets: inherit
     with:
       version: ${{ needs.prepare.outputs.version }}
@@ -132,10 +132,10 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - prepare
-      - desktop
+      - client
       - server
       - docker
-    if: ${{ needs.desktop.result == 'success' && needs.server.result == 'success' && needs.docker.result == 'success' }}
+    if: ${{ needs.client.result == 'success' && needs.server.result == 'success' && needs.docker.result == 'success' }}
     permissions:
       contents: write
     env:

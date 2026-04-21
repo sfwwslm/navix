@@ -1,5 +1,5 @@
 export type { SharedMenuItem, TranslateLike } from "./navigation/menu";
-export { buildDesktopMenuItems } from "./navigation/menu";
+export { buildClientMenuItems } from "./navigation/menu";
 export { default as SelectField } from "./components/SelectField";
 export type {
   SelectFieldOption,

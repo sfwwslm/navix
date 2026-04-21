@@ -7,7 +7,7 @@ export type SharedMenuItem = {
   children?: SharedMenuItem[];
 };
 
-export const buildDesktopMenuItems = (t: TranslateLike): SharedMenuItem[] => [
+export const buildClientMenuItems = (t: TranslateLike): SharedMenuItem[] => [
   {
     id: 100,
     label: t("menu.navigation"),

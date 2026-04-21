@@ -1,5 +1,5 @@
 //! 统一 API 响应与错误码定义。
-//! 该模块在 server/desktop/tauri/web 之间共享，保证链路上的错误语义一致。
+//! 该模块在 server/client/tauri/web 之间共享，保证链路上的错误语义一致。
 
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;

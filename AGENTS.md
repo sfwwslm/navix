@@ -4,7 +4,7 @@
 
 This monorepo uses two workspaces: Rust (`Cargo.toml`) and Node (`pnpm-workspace.yaml`).
 
-- `apps/desktop`: Tauri desktop app (`src/` for React UI, `src-tauri/` for Rust host).
+- `apps/client`: Tauri client app (`src/` for React UI, `src-tauri/` for Rust host).
 - `apps/server`: Rust + Axum backend (`src/api`, `src/services`, `src/models`, `migrations/`).
 - `apps/web`: Vite + React web client (`src/pages`, `src/components`, `src/router`).
 - `packages/`: shared packages used across frontend and backend, including Rust and TypeScript utilities.
@@ -15,8 +15,8 @@ Run commands from repo root unless noted.
 
 ### Development
 
-- `pnpm tauri dev`: run desktop app in dev mode.
-- `pnpm build`: create desktop bundles.
+- `pnpm tauri dev`: run client app in dev mode.
+- `pnpm build`: create client bundles.
 - `cargo run -p navix-server`: start backend locally.
 - `pnpm --dir apps/web dev`: start web dev server.
 
@@ -33,8 +33,8 @@ Run commands from repo root unless noted.
 
 - Rust: `rustfmt` defaults (4-space indent), `snake_case` modules/files, `CamelCase` types.
 - TypeScript/React: 2-space indent, `PascalCase` components (for example `UserMenu.tsx`), `camelCase` hooks/utilities (for example `useCurrentUser.ts`).
-- Keep feature-local styles next to components (`*.module.css` in `apps/web`, `*.styles.ts` in desktop).
-- Frontend in this repo means the TS/React code under `apps/web` and `apps/desktop`.
+- Keep feature-local styles next to components (`*.module.css` in `apps/web`, `*.styles.ts` in client).
+- Frontend in this repo means the TS/React code under `apps/web` and `apps/client`.
 - Use the repo formatting commands for TS/React code: `pnpm format` for frontend-only changes, `pnpm format:all` when frontend and backend both changed.
 - Frontend business UI must include stable, searchable DOM markers for debugging and automation. Prefer `data-page`, `data-ui`, and `data-slot`; use `id` only when global uniqueness is semantically required.
 
@@ -55,13 +55,13 @@ Run commands from repo root unless noted.
 
 - Recent history uses very short commit subjects; prefer clear, scoped summaries instead: `server: validate refresh token expiry`.
 - Keep subject lines imperative and <= 72 chars.
-- PRs should include: purpose, impacted apps (`server/web/desktop`), test evidence (commands run), and screenshots/GIFs for UI changes.
+- PRs should include: purpose, impacted apps (`server/web/client`), test evidence (commands run), and screenshots/GIFs for UI changes.
 - Link related issues and note config/migration impact (for example new SQL in `apps/server/migrations/`).
 
 ## Security & Configuration Tips
 
 - Keep secrets in local env/config files only; never commit tokens, keys, or production DB URLs.
-- Review Tauri capability changes in `apps/desktop/src-tauri/capabilities/` carefully in PRs.
+- Review Tauri capability changes in `apps/client/src-tauri/capabilities/` carefully in PRs.
 
 ## Development Process
 

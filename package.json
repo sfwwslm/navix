@@ -5,16 +5,16 @@
   "type": "module",
   "scripts": {
     "version:set": "node scripts/set-version.mjs",
-    "tauri": "pnpm --dir apps/desktop tauri",
-    "build": "pnpm --dir apps/desktop build",
-    "build:fast": "pnpm --dir apps/desktop build -- --profile fast-release",
+    "tauri": "pnpm --dir apps/client tauri",
+    "build": "pnpm --dir apps/client build",
+    "build:fast": "pnpm --dir apps/client build -- --profile fast-release",
     "web:dev": "pnpm --dir apps/web dev",
     "web:build": "pnpm --dir apps/web web:build",
     "server:dev": "pnpm --dir apps/web web:build && cargo run -p navix-server",
     "code:stats": "node --experimental-strip-types scripts/count-code-lines.ts",
-    "check": "pnpm --dir apps/desktop check && pnpm --dir apps/web check && pnpm --dir packages/shared-ts check && pnpm --dir packages/shared-ui check",
+    "check": "pnpm --dir apps/client check && pnpm --dir apps/web check && pnpm --dir packages/shared-ts check && pnpm --dir packages/shared-ui check",
     "check:all": "pnpm check && cargo clippy --all-targets --all-features -- -D warnings",
-    "format": "pnpm --dir apps/desktop format && pnpm --dir apps/web format && pnpm --dir packages/shared-ts format && pnpm --dir packages/shared-ui format",
+    "format": "pnpm --dir apps/client format && pnpm --dir apps/web format && pnpm --dir packages/shared-ts format && pnpm --dir packages/shared-ui format",
     "format:all": "pnpm format && cargo fmt"
   },
   "devDependencies": {

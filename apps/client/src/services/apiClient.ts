@@ -24,7 +24,7 @@ import { getActiveSessionUser, refreshActiveSession } from "./authSession";
 import { log, toErrorMessage } from "@/utils/logger";
 
 const telemetry = createFrontendTelemetryLogger({
-  app: "desktop",
+  app: "client",
   appVersion:
     (import.meta as { env?: { VITE_APP_VERSION?: string } }).env
       ?.VITE_APP_VERSION ?? "unknown",

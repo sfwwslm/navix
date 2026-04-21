@@ -2,7 +2,7 @@
 
 ## 概述
 
-本文档定义 Navix 项目的统一可观测性约定，适用于 `apps/server`、`apps/desktop`、`apps/web` 以及相关共享模块。
+本文档定义 Navix 项目的统一可观测性约定，适用于 `apps/server`、`apps/client`、`apps/web` 以及相关共享模块。
 
 目标是让日志、埋点与链路上下文保持一致，便于排障、质量分析与运行状态观察。
 
@@ -41,7 +41,7 @@
 - `event_name`：事件名称
 - `timestamp`：UTC 时间，ISO 8601 格式
 - `level`：日志等级
-- `source.layer`：事件来源层，如 `server`、`desktop`、`web`
+- `source.layer`：事件来源层，如 `server`、`client`、`web`
 - `source.app`：应用标识
 - `source.app_version`：应用版本
 - `context.trace_id`：跨端链路追踪 ID
@@ -120,7 +120,7 @@
 - 服务端负责请求上下文注入、结构化输出和错误码映射。
 - 业务日志应复用统一结构，不单独维护另一套格式。
 
-### Desktop 与 Web
+### client 与 Web
 
 - 客户端负责在请求、同步、关键交互和错误场景中补齐上下文。
 - 前端事件应通过共享日志工具输出，避免分散的自定义格式。

@@ -1,8 +1,8 @@
-# Navix 桌面客户端
+# Navix 客户端
 
 桌面客户端的详细文档已迁移到根目录 `docs`：
 
-- [docs/desktop-client.md](../../docs/desktop-client.md)
+- [docs/client-app.md](../../docs/client-app.md)
 
 该文档以当前 monorepo 结构和实际实现为准，包含：
 

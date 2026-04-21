@@ -19,7 +19,7 @@ pub async fn db_health_check(
 
     match ping {
         Ok(_) => Ok(ApiResponse::success(
-            "desktop database is ready",
+            "client database is ready",
             DbHealthCheckData { status: "ok" },
         )),
         Err(err) => Err(crate::db::error::DbError::from(err).into_response()),

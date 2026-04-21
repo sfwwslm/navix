@@ -32,7 +32,7 @@ pub async fn init(app: &tauri::App) -> DbResult<DbPool> {
     let db_file_value = db_file.display().to_string();
 
     modules::telemetry::emit_event(
-        "desktop.db.init_started",
+        "client.db.init_started",
         LogLevel::Info,
         &trace_id,
         BTreeMap::from([
@@ -82,14 +82,14 @@ pub async fn init(app: &tauri::App) -> DbResult<DbPool> {
 
     match &result {
         Ok(_) => modules::telemetry::emit_event(
-            "desktop.db.init_completed",
+            "client.db.init_completed",
             LogLevel::Info,
             &trace_id,
             BTreeMap::from([("db_path".to_string(), db_file_value)]),
             "init",
         ),
         Err(err) => modules::telemetry::emit_event(
-            "desktop.db.init_failed",
+            "client.db.init_failed",
             LogLevel::Error,
             &trace_id,
             BTreeMap::from([

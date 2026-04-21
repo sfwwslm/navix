@@ -20,7 +20,7 @@ impl<R: Runtime> CustomInit for tauri::Builder<R> {
 pub fn setup(app: &mut tauri::App) {
     if let Err(e) = tray::create(app) {
         telemetry::emit_event(
-            "desktop.app.setup_failed",
+            "client.app.setup_failed",
             LogLevel::Error,
             &telemetry::ensure_trace_id(),
             std::collections::BTreeMap::from([
@@ -35,7 +35,7 @@ pub fn setup(app: &mut tauri::App) {
 
     if let Err(e) = logger::init(app) {
         telemetry::emit_event(
-            "desktop.app.setup_failed",
+            "client.app.setup_failed",
             LogLevel::Error,
             &telemetry::ensure_trace_id(),
             std::collections::BTreeMap::from([
@@ -84,7 +84,7 @@ pub fn setup(app: &mut tauri::App) {
                 .build(),
         ) {
             telemetry::emit_event(
-                "desktop.app.shortcut_failed",
+                "client.app.shortcut_failed",
                 LogLevel::Warn,
                 &telemetry::ensure_trace_id(),
                 std::collections::BTreeMap::from([(
@@ -97,7 +97,7 @@ pub fn setup(app: &mut tauri::App) {
     }
 
     telemetry::emit_event(
-        "desktop.app.setup_completed",
+        "client.app.setup_completed",
         LogLevel::Info,
         &telemetry::ensure_trace_id(),
         std::collections::BTreeMap::new(),
@@ -118,7 +118,7 @@ pub fn manage(app: &mut tauri::App) {
     app.manage(SyncApplyLock::default());
 
     telemetry::emit_event(
-        "desktop.app.state_ready",
+        "client.app.state_ready",
         LogLevel::Info,
         &telemetry::ensure_trace_id(),
         std::collections::BTreeMap::new(),

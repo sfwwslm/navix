@@ -109,8 +109,8 @@ pub fn emit_event(
         timestamp: chrono::Utc::now().to_rfc3339(),
         level: level.as_str().to_string(),
         source: TelemetrySource {
-            layer: TelemetrySourceLayer::Desktop.as_str().to_string(),
-            app: "navix-desktop".to_string(),
+            layer: TelemetrySourceLayer::Client.as_str().to_string(),
+            app: "navix-client".to_string(),
             app_version: env!("CARGO_PKG_VERSION").to_string(),
             env: std::env::var("NAVIX_ENV")
                 .or_else(|_| std::env::var("APP_ENV"))
@@ -126,7 +126,7 @@ pub fn emit_event(
             trace_id: trace_id.to_string(),
             request_id: None,
             route: None,
-            platform: Some("desktop".to_string()),
+            platform: Some("client".to_string()),
             device_id: None,
         },
         metrics: TelemetryMetrics { latency_ms: None },
@@ -155,6 +155,6 @@ pub fn emit_event(
             LogLevel::Debug => log::debug!("{line}"),
             _ => log::info!("{line}"),
         },
-        Err(err) => log::error!("failed to serialize desktop telemetry record: {err}"),
+        Err(err) => log::error!("failed to serialize client telemetry record: {err}"),
     }
 }
