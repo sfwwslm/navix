@@ -148,6 +148,30 @@ const ControlCenter = ({
     action: ConfirmAction;
   } | null>(null);
 
+  // 记录上次面板开启状态和活动区域，用于重置逻辑
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  const [prevActiveSection, setPrevActiveSection] = useState(activeSection);
+
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
+    if (!isOpen) {
+      // 面板关闭时，同步重置所有临时消息状态
+      setUsernameMessage(null);
+      setPasswordMessage(null);
+      setAdminError(null);
+      setAdminMessage(null);
+      setAccountSwitchMessage(null);
+      setConfirmState(null);
+    }
+  }
+
+  if (isOpen && activeSection !== prevActiveSection) {
+    setPrevActiveSection(activeSection);
+    if (activeSection === "account") {
+      setStoredAccounts(getStoredAccountSessions());
+    }
+  }
+
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -221,29 +245,11 @@ const ControlCenter = ({
     if (!isOpen || activeSection !== "admin" || !isAdmin) {
       return;
     }
-    void fetchAdminUsers();
+
+    void (async () => {
+      await fetchAdminUsers();
+    })();
   }, [activeSection, fetchAdminUsers, isAdmin, isOpen]);
-
-  useEffect(() => {
-    if (!isOpen || activeSection !== "account") {
-      return;
-    }
-
-    setStoredAccounts(getStoredAccountSessions());
-  }, [activeSection, isOpen]);
-
-  useEffect(() => {
-    if (isOpen) {
-      return;
-    }
-
-    setUsernameMessage(null);
-    setPasswordMessage(null);
-    setAdminError(null);
-    setAdminMessage(null);
-    setAccountSwitchMessage(null);
-    setConfirmState(null);
-  }, [isOpen]);
 
   useAutoDismissState(
     usernameMessage,

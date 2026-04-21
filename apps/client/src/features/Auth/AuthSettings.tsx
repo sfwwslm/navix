@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { useAuth } from "@/contexts/Auth.context";
@@ -152,6 +152,19 @@ const AuthSettings: React.FC = () => {
   const [isUpdatingServer, setIsUpdatingServer] = useState(false);
   const [isDeletingUser, setIsDeletingUser] = useState(false);
 
+  // 记录上次同步到 state 的用户 ID，用于在 activeUser 变化时重置表单
+  const [prevUserUuid, setPrevUserUuid] = useState<string | null>(
+    activeUser?.uuid ?? null,
+  );
+
+  const currentUserUuid = activeUser?.uuid ?? null;
+  if (currentUserUuid !== prevUserUuid) {
+    setPrevUserUuid(currentUserUuid);
+    setServerAddress(activeUser?.serverAddress || "");
+    setServerAddressError("");
+    setServerAddressUpdated(false);
+  }
+
   const handleUserSwitch = (uuid: string | number) => {
     const selectedUser = availableUsers.find((u) => u.uuid === uuid);
     if (selectedUser) {
@@ -179,12 +192,6 @@ const AuthSettings: React.FC = () => {
 
   const canEditServerAddress =
     isLoggedIn && activeUser?.uuid !== ANONYMOUS_USER_UUID;
-
-  useEffect(() => {
-    setServerAddress(activeUser?.serverAddress || "");
-    setServerAddressError("");
-    setServerAddressUpdated(false);
-  }, [activeUser]);
 
   const hasServerChanged = useMemo(() => {
     const trimmed = serverAddress.trim();

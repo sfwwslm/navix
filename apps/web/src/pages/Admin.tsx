@@ -76,7 +76,10 @@ const AdminPage = () => {
       void navigate("/launchpad");
       return;
     }
-    void fetchUsers();
+
+    void (async () => {
+      await fetchUsers();
+    })();
   }, [currentUser, fetchUsers, navigate]);
 
   const performAction = async (

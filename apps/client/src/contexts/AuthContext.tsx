@@ -94,9 +94,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return users;
   }, []);
 
+  // 初始加载用户列表
   useEffect(() => {
-    void refreshAvailableUsers();
-  }, [refreshAvailableUsers]);
+    let isMounted = true;
+    void getAllUsers().then((users) => {
+      if (isMounted) {
+        setAvailableUsers(users);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   /**
    * 订阅统一会话状态变化，确保 refresh 后 React 内存态与持久化状态同步更新。

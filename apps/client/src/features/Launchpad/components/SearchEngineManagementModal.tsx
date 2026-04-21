@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { IoCheckmarkCircle, IoTrash, IoPencil } from "react-icons/io5";
 import { useModal } from "@/contexts";
@@ -56,7 +56,16 @@ const SearchEngineManagementModal: React.FC<
   const [iconPath, setIconPath] = useState<string | null>(null);
   const { t } = useTranslation();
 
-  useEffect(() => {
+  // 记录上次处理的 editingEngine.uuid 和 isOpen 状态
+  const [prevEngineUuid, setPrevEngineUuid] = useState<string | null>(null);
+  const [prevIsOpen, setPrevIsOpen] = useState(false);
+
+  const currentEngineUuid = editingEngine?.uuid ?? null;
+
+  if (isOpen !== prevIsOpen || currentEngineUuid !== prevEngineUuid) {
+    setPrevIsOpen(isOpen);
+    setPrevEngineUuid(currentEngineUuid);
+
     if (isOpen) {
       if (editingEngine) {
         setName(editingEngine.name);
@@ -68,9 +77,15 @@ const SearchEngineManagementModal: React.FC<
         setIconPath(null);
       }
     } else {
-      setEditingEngine(null);
+      // When modal closes, reset internal state and the editing engine selection
+      if (editingEngine !== null) {
+        setEditingEngine(null);
+      }
+      setName("");
+      setUrlTemplate("");
+      setIconPath(null);
     }
-  }, [isOpen, editingEngine]);
+  }
 
   const handleEditClick = (e: React.MouseEvent, engine: SearchEngine): void => {
     e.stopPropagation();

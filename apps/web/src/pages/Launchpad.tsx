@@ -114,6 +114,34 @@ const LaunchpadPage = () => {
   const [iconUrls, setIconUrls] = useState<Record<string, string>>({});
   const [savingSite, setSavingSite] = useState(false);
   const [deletingSiteUuid, setDeletingSiteUuid] = useState<string | null>(null);
+
+  // 用于在侧边栏状态或列表内容变化时同步重置 activeGroupUuid
+  const [prevSidebarEnabled, setPrevSidebarEnabled] = useState(
+    launchpadSidebarEnabled,
+  );
+  const [prevLaunchpadLength, setPrevLaunchpadLength] = useState(
+    launchpad.length,
+  );
+
+  if (
+    launchpadSidebarEnabled !== prevSidebarEnabled ||
+    launchpad.length !== prevLaunchpadLength
+  ) {
+    setPrevSidebarEnabled(launchpadSidebarEnabled);
+    setPrevLaunchpadLength(launchpad.length);
+    if (!launchpadSidebarEnabled || launchpad.length === 0) {
+      setActiveGroupUuid(null);
+    } else if (!activeGroupUuid && sortedLaunchpad[0]) {
+      // 这里的 sortedLaunchpad 依赖 launchpad，如果 launchpad 变了，sortedLaunchpad 也会更新
+      setActiveGroupUuid(sortedLaunchpad[0].uuid);
+    }
+  }
+
+  // 额外处理 activeGroupUuid 为空但列表不为空的初始情况
+  if (launchpadSidebarEnabled && !activeGroupUuid && sortedLaunchpad.length > 0) {
+    setActiveGroupUuid(sortedLaunchpad[0].uuid);
+  }
+
   const iconUrlsRef = useRef<Record<string, string>>({});
   const groupRefs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
@@ -159,7 +187,9 @@ const LaunchpadPage = () => {
   }, [navigate, t]);
 
   useEffect(() => {
-    void loadLaunchpad();
+    void (async () => {
+      await loadLaunchpad();
+    })();
   }, [loadLaunchpad]);
 
   const sortedLaunchpad = useMemo(() => {
@@ -295,7 +325,6 @@ const LaunchpadPage = () => {
 
   useEffect(() => {
     if (!launchpadSidebarEnabled || sortedLaunchpad.length === 0) {
-      setActiveGroupUuid(null);
       return;
     }
 
@@ -322,10 +351,6 @@ const LaunchpadPage = () => {
         observer.observe(element);
       }
     });
-
-    if (!activeGroupUuid && sortedLaunchpad[0]) {
-      setActiveGroupUuid(sortedLaunchpad[0].uuid);
-    }
 
     return () => {
       observer.disconnect();

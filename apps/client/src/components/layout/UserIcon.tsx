@@ -29,6 +29,10 @@ const UserIcon: React.FC = () => {
   const [isCardOpen, setIsCardOpen] = useState(false);
   const iconRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const [cardPosition, setCardPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
   const theme = useTheme();
 
   useEffect(() => {
@@ -49,45 +53,24 @@ const UserIcon: React.FC = () => {
     };
   }, [isCardOpen]);
 
-  const getCardPosition = () => {
-    if (!iconRef.current) return {};
-    const rect = iconRef.current.getBoundingClientRect();
-    const cardWidth = 280;
-    const margin = 10;
-    let left = rect.right - cardWidth;
-    if (left < margin) {
-      left = margin;
+  // 当面板打开时测量位置
+  React.useLayoutEffect(() => {
+    if (isCardOpen && iconRef.current) {
+      const rect = iconRef.current.getBoundingClientRect();
+      const cardWidth = 280;
+      const margin = 10;
+      let left = rect.right - cardWidth;
+      if (left < margin) {
+        left = margin;
+      }
+      setCardPosition({
+        top: rect.bottom + 8,
+        left: left,
+      });
+    } else {
+      setCardPosition(null);
     }
-    return {
-      top: rect.bottom + 8,
-      left: left,
-    };
-  };
-
-  const PortalWrapper: React.FC<{ children: React.ReactNode }> = ({
-    children,
-  }) => {
-    const portalRootRef = useRef(document.createElement("div"));
-
-    useEffect(() => {
-      const portalRoot = portalRootRef.current;
-      const position = getCardPosition();
-      portalRoot.style.position = "fixed";
-      portalRoot.style.top = `${position.top}px`;
-      portalRoot.style.left = `${position.left}px`;
-      portalRoot.style.zIndex = theme.zIndices.userCard.toString();
-
-      document.body.appendChild(portalRoot);
-      cardRef.current = portalRoot; //
-
-      return () => {
-        document.body.removeChild(portalRoot);
-        cardRef.current = null;
-      };
-    }, []); //
-
-    return createPortal(children, portalRootRef.current);
-  };
+  }, [isCardOpen]);
 
   return (
     <>
@@ -99,13 +82,24 @@ const UserIcon: React.FC = () => {
         <IoPersonCircleOutline />
       </IconContainer>
 
-      {isCardOpen && (
-        <PortalWrapper>
-          <ThemeProvider theme={theme}>
-            <UserProfileCard onClose={() => setIsCardOpen(false)} />
-          </ThemeProvider>
-        </PortalWrapper>
-      )}
+      {isCardOpen &&
+        cardPosition &&
+        createPortal(
+          <div
+            ref={cardRef}
+            style={{
+              position: "fixed",
+              top: cardPosition.top,
+              left: cardPosition.left,
+              zIndex: theme.zIndices.userCard,
+            }}
+          >
+            <ThemeProvider theme={theme}>
+              <UserProfileCard onClose={() => setIsCardOpen(false)} />
+            </ThemeProvider>
+          </div>,
+          document.body,
+        )}
     </>
   );
 };

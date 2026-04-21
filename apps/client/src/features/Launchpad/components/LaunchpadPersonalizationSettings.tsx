@@ -47,8 +47,15 @@ const LaunchpadPersonalizationSettings: React.FC = () => {
     useLaunchpadSettings();
 
   const [liveMargin, setLiveMargin] = useState(persistedMargin);
-  useEffect(() => {
+  const [prevPersistedMargin, setPrevPersistedMargin] =
+    useState(persistedMargin);
+
+  if (persistedMargin !== prevPersistedMargin) {
+    setPrevPersistedMargin(persistedMargin);
     setLiveMargin(persistedMargin);
+  }
+
+  useEffect(() => {
     document.documentElement.style.setProperty(
       "--Launchpad-side-margin-percent",
       `${persistedMargin}`,
