@@ -18,10 +18,9 @@
     "strict": true, // 启用所有严格类型检查选项
     "noUnusedLocals": true, // 报告未使用的局部变量
     "noUnusedParameters": true, // 报告未使用的函数参数
-    "noFallthroughCasesInSwitch": true, // 报告 switch 语句中未处理的 fallthrough 情况
-    "baseUrl": ".", // 解析非相对模块名称的基目录
+    "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@/*": ["src/*"] // 配置路径别名，@/* 映射到 src/*
+      "@/*": ["./src/*"] // 配置路径别名，@/* 映射到 src/*
     }
   },
   "include": ["src"], // 包含 src 目录下的所有文件进行编译

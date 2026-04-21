@@ -127,7 +127,7 @@ function extractPayloadFromResponse(
   }
 
   if (isRecord(value.error)) {
-    return value.error as Partial<AppErrorPayload>;
+    return value.error;
   }
 
   const code = isAppErrorCode(value.code) ? value.code : undefined;

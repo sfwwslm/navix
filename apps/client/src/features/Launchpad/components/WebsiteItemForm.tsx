@@ -166,7 +166,7 @@ const WebsiteItemForm: React.FC<WebsiteItemFormProps> = ({
         <Label>{t("launchpad.group")}</Label>
         <CustomSelect
           value={item.group_uuid}
-          onChange={(value) => onItemChange("group_uuid", value as string)}
+          onChange={(value) => onItemChange("group_uuid", value)}
           options={groupOptions}
           placeholder={t("launchpad.selectGroup")}
         />

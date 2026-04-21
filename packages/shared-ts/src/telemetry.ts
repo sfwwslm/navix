@@ -153,9 +153,9 @@ export const createFrontendTelemetryLogger = (
       typeof optionsOrPayload === "object" &&
       !("payload" in optionsOrPayload) &&
       !("level" in optionsOrPayload);
-    const opts = isFlatPayload
+    const opts: TrackEventOptions = isFlatPayload
       ? { payload: optionsOrPayload as TelemetryPayload }
-      : (optionsOrPayload as TrackEventOptions);
+      : optionsOrPayload;
     const resolved = resolveContext(overrides);
     const level = opts.level ?? LogLevel.Info;
     const hasFailure =

@@ -588,7 +588,7 @@ async function sendDataInChunks<T>(
       chunk_index: i,
       total_chunks: totalChunks,
       chunk_checksum: buildChunkChecksum(chunk),
-      chunk_data: chunk as unknown as Record<string, unknown>[],
+      chunk_data: chunk,
     };
     // 简单重试，避免网络波动导致同步中断
     let attempt = 0;
