@@ -115,41 +115,36 @@ const LaunchpadPage = () => {
   const [savingSite, setSavingSite] = useState(false);
   const [deletingSiteUuid, setDeletingSiteUuid] = useState<string | null>(null);
 
-  // 用于在侧边栏状态或列表内容变化时同步重置 activeGroupUuid
-  const [prevSidebarEnabled, setPrevSidebarEnabled] = useState(
-    launchpadSidebarEnabled,
-  );
-  const [prevLaunchpadLength, setPrevLaunchpadLength] = useState(
-    launchpad.length,
-  );
-
-  if (
-    launchpadSidebarEnabled !== prevSidebarEnabled ||
-    launchpad.length !== prevLaunchpadLength
-  ) {
-    setPrevSidebarEnabled(launchpadSidebarEnabled);
-    setPrevLaunchpadLength(launchpad.length);
-    if (!launchpadSidebarEnabled || launchpad.length === 0) {
-      setActiveGroupUuid(null);
-    } else if (!activeGroupUuid && sortedLaunchpad[0]) {
-      // 这里的 sortedLaunchpad 依赖 launchpad，如果 launchpad 变了，sortedLaunchpad 也会更新
-      setActiveGroupUuid(sortedLaunchpad[0].uuid);
-    }
-  }
-
-  // 额外处理 activeGroupUuid 为空但列表不为空的初始情况
-  if (
-    launchpadSidebarEnabled &&
-    !activeGroupUuid &&
-    sortedLaunchpad.length > 0
-  ) {
-    setActiveGroupUuid(sortedLaunchpad[0].uuid);
-  }
-
   const iconUrlsRef = useRef<Record<string, string>>({});
   const groupRefs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
   const { launchpadMode: mode } = useOutletContext<AppShellOutletContext>();
+
+  const sortedLaunchpad = useMemo(() => {
+    const byOrderThen = <T extends { sort_order?: number | null }>(
+      a: T,
+      b: T,
+      fallback: (x: T, y: T) => number,
+    ) => {
+      const orderA = a.sort_order ?? Number.MAX_SAFE_INTEGER;
+      const orderB = b.sort_order ?? Number.MAX_SAFE_INTEGER;
+      if (orderA !== orderB) return orderA - orderB;
+      return fallback(a, b);
+    };
+
+    const sortedGroups = [...launchpad]
+      .map((group) => ({
+        ...group,
+        websites: [...group.websites].sort((a, b) =>
+          byOrderThen(a, b, (x, y) => x.title.localeCompare(y.title)),
+        ),
+      }))
+      .sort((a, b) =>
+        byOrderThen(a, b, (x, y) => x.name.localeCompare(y.name)),
+      );
+
+    return sortedGroups;
+  }, [launchpad]);
 
   /**
    * 拉取导航基础数据和当前用户信息。
@@ -196,32 +191,6 @@ const LaunchpadPage = () => {
     })();
   }, [loadLaunchpad]);
 
-  const sortedLaunchpad = useMemo(() => {
-    const byOrderThen = <T extends { sort_order?: number | null }>(
-      a: T,
-      b: T,
-      fallback: (x: T, y: T) => number,
-    ) => {
-      const orderA = a.sort_order ?? Number.MAX_SAFE_INTEGER;
-      const orderB = b.sort_order ?? Number.MAX_SAFE_INTEGER;
-      if (orderA !== orderB) return orderA - orderB;
-      return fallback(a, b);
-    };
-
-    const sortedGroups = [...launchpad]
-      .map((group) => ({
-        ...group,
-        websites: [...group.websites].sort((a, b) =>
-          byOrderThen(a, b, (x, y) => x.title.localeCompare(y.title)),
-        ),
-      }))
-      .sort((a, b) =>
-        byOrderThen(a, b, (x, y) => x.name.localeCompare(y.name)),
-      );
-
-    return sortedGroups;
-  }, [launchpad]);
-
   const groupOptions = useMemo(
     () =>
       sortedLaunchpad.map((group) => ({
@@ -230,6 +199,15 @@ const LaunchpadPage = () => {
       })),
     [sortedLaunchpad],
   );
+  const resolvedActiveGroupUuid = useMemo(() => {
+    if (!launchpadSidebarEnabled || sortedLaunchpad.length === 0) {
+      return null;
+    }
+
+    return sortedLaunchpad.some((group) => group.uuid === activeGroupUuid)
+      ? activeGroupUuid
+      : sortedLaunchpad[0].uuid;
+  }, [activeGroupUuid, launchpadSidebarEnabled, sortedLaunchpad]);
 
   useEffect(() => {
     iconUrlsRef.current = iconUrls;
@@ -359,7 +337,7 @@ const LaunchpadPage = () => {
     return () => {
       observer.disconnect();
     };
-  }, [activeGroupUuid, launchpadSidebarEnabled, sortedLaunchpad]);
+  }, [launchpadSidebarEnabled, sortedLaunchpad]);
 
   const getSiteUrlForMode = (site: LaunchpadWebsite) =>
     mode === "lan" && site.url_lan ? site.url_lan : site.url;
@@ -547,7 +525,7 @@ const LaunchpadPage = () => {
                         data-ui="launchpad-sidebar-button"
                         data-entity="launchpad-group"
                         data-group-uuid={group.uuid}
-                        data-active={activeGroupUuid === group.uuid}
+                        data-active={resolvedActiveGroupUuid === group.uuid}
                         onClick={() => {
                           const section = groupRefs.current[group.uuid];
                           if (section) {
