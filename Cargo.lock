@@ -3327,7 +3327,7 @@ dependencies = [
 
 [[package]]
 name = "navix"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "chrono",
  "hex",
@@ -3360,7 +3360,7 @@ dependencies = [
 
 [[package]]
 name = "navix-server"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "axum",
@@ -5360,7 +5360,7 @@ dependencies = [
 
 [[package]]
 name = "shared-rs"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "axum",
