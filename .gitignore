@@ -34,4 +34,4 @@ apps/server/.navix-dev/
 *.sw?
 
 # Local skills/config
-.agents/
+*/skills/*
