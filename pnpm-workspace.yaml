@@ -14,7 +14,7 @@ catalog:
   "@types/node": 24.12.0
   "@types/react": 19.2.7
   "@types/react-dom": 19.2.3
-  "@vitejs/plugin-react": 5.1.2
+  "@vitejs/plugin-react": 6.0.1
   "@iconify/react": 6.0.2
   prettier: 3.6.2
   react: 19.2.3
@@ -23,5 +23,5 @@ catalog:
   ts-prune: 0.10.3
   typescript: 6.0.3
   typescript-eslint: "^8.59.0"
-  vite: 7.3.0
+  vite: 8.0.9
   zod: 4.1.11
