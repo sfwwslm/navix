@@ -126,7 +126,7 @@ const AppLayout: React.FC = () => {
   );
 };
 
-export default function App() {
+export default function RootLayout() {
   return (
     <AppProvider>
       <GlobalStyle />

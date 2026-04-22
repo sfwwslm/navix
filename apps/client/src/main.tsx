@@ -5,7 +5,8 @@ import Loading from "./components/common/Loading";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import { getLanguage } from "@/utils/config";
-import { Routes } from "@generouted/react-router/lazy";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
 import InitializationError from "./components/common/InitializationError";
 import { log } from "@/utils/logger";
 import {
@@ -74,7 +75,7 @@ function renderApp() {
   root.render(
     <React.StrictMode>
       <Suspense fallback={<Loading />}>
-        <Routes />
+        <RouterProvider router={router} />
       </Suspense>
     </React.StrictMode>,
   );

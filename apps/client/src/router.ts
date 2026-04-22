@@ -1,18 +1,36 @@
-// Generouted, changes to this file will be overridden
-/* eslint-disable */
+import { createBrowserRouter } from "react-router-dom";
+import RootLayout from "./components/layout/RootLayout";
+import Launchpad from "./pages/Launchpad";
+import About from "./pages/help/About";
+import Changelog from "./pages/help/Changelog";
+import Update from "./pages/help/Update";
 
-import { components, hooks, utils } from "@generouted/react-router/client";
-
-export type Path = `/` | `/help/about` | `/help/changelog` | `/help/update`;
-
-export type Params = {};
-
-export type ModalPath = never;
-
-export const { Link, Navigate } = components<Path, Params>();
-export const { useModals, useNavigate, useParams } = hooks<
-  Path,
-  Params,
-  ModalPath
->();
-export const { redirect } = utils<Path, Params>();
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: RootLayout,
+    children: [
+      {
+        index: true,
+        Component: Launchpad,
+      },
+      {
+        path: "help",
+        children: [
+          {
+            path: "about",
+            Component: About,
+          },
+          {
+            path: "changelog",
+            Component: Changelog,
+          },
+          {
+            path: "update",
+            Component: Update,
+          },
+        ],
+      },
+    ],
+  },
+]);
