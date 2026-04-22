@@ -1,3 +1,4 @@
+use crate::types::{APP_CONFIG_DIR, APP_DATA_DIR, HOME_VUST_DIR};
 use crate::utils::app_data_dir_path;
 use std::fmt;
 use std::path::PathBuf;
@@ -34,7 +35,10 @@ pub fn database_file_path(app: &tauri::App) -> PathBuf {
 pub fn database_file_path_from_handle(app_handle: &tauri::AppHandle) -> PathBuf {
     app_handle
         .path()
-        .app_data_dir()
-        .expect("failed to get app data dir")
+        .home_dir()
+        .expect("failed to get home dir")
+        .join(HOME_VUST_DIR)
+        .join(APP_CONFIG_DIR)
+        .join(APP_DATA_DIR)
         .join(DATABASE_FILE)
 }
