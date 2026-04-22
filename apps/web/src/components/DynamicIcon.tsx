@@ -8,6 +8,7 @@ type DynamicIconProps = {
   alt: string;
   fallback: ReactNode;
   className?: string;
+  unstyled?: boolean;
 };
 
 /**
@@ -20,6 +21,7 @@ const DynamicIcon = ({
   alt,
   fallback,
   className,
+  unstyled = false,
 }: DynamicIconProps) => {
   const mergedClassName = [styles.icon, className].filter(Boolean).join(" ");
 
@@ -31,7 +33,11 @@ const DynamicIcon = ({
     return (
       <Iconify
         icon={defaultIcon}
-        className={[mergedClassName, styles.iconifyIcon].join(" ")}
+        className={
+          unstyled
+            ? mergedClassName
+            : [mergedClassName, styles.iconifyIcon].join(" ")
+        }
         aria-label={alt}
         role="img"
       />

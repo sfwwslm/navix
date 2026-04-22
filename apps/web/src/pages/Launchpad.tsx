@@ -10,6 +10,8 @@ import iconStyles from "../components/DynamicIcon.module.css";
 import styles from "./Launchpad.module.css";
 import type { Claims } from "@navix/shared-ts";
 
+type SearchEngineId = "bing" | "google";
+
 interface LaunchpadWebsite {
   uuid: string;
   group_uuid: string;
@@ -47,6 +49,30 @@ type SiteEditFormState = {
   local_icon_path: string | null;
   description: string;
 };
+
+interface BuiltInSearchEngine {
+  id: SearchEngineId;
+  name: string;
+  url_template: string;
+  default_icon: string;
+}
+
+const SEARCH_ENGINE_STORAGE_KEY = "launchpadSearchEngine";
+
+const builtInSearchEngines: BuiltInSearchEngine[] = [
+  {
+    id: "bing",
+    name: "Bing",
+    url_template: "https://cn.bing.com/search?q=%s",
+    default_icon: "logos:bing",
+  },
+  {
+    id: "google",
+    name: "Google",
+    url_template: "https://www.google.com/search?q=%s",
+    default_icon: "devicon:google",
+  },
+];
 
 const DefaultIcon = ({ label, alt }: { label: string; alt: string }) => (
   <div className={styles.defaultIcon}>
@@ -98,6 +124,15 @@ function isValidUrl(value: string): boolean {
   }
 }
 
+function getStoredSearchEngineId(): SearchEngineId {
+  if (typeof window === "undefined") {
+    return "bing";
+  }
+
+  const storedValue = window.localStorage.getItem(SEARCH_ENGINE_STORAGE_KEY);
+  return storedValue === "google" ? "google" : "bing";
+}
+
 const LaunchpadPage = () => {
   const { launchpadSidebarEnabled, t } = useI18n();
   const [launchpad, setLaunchpad] = useState<LaunchpadGroup[]>([]);
@@ -114,9 +149,14 @@ const LaunchpadPage = () => {
   const [iconUrls, setIconUrls] = useState<Record<string, string>>({});
   const [savingSite, setSavingSite] = useState(false);
   const [deletingSiteUuid, setDeletingSiteUuid] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeSearchEngineId, setActiveSearchEngineId] =
+    useState<SearchEngineId>(getStoredSearchEngineId);
+  const [searchEngineMenuOpen, setSearchEngineMenuOpen] = useState(false);
 
   const iconUrlsRef = useRef<Record<string, string>>({});
   const groupRefs = useRef<Record<string, HTMLElement | null>>({});
+  const searchEngineMenuRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const { launchpadMode: mode } = useOutletContext<AppShellOutletContext>();
 
@@ -199,19 +239,69 @@ const LaunchpadPage = () => {
       })),
     [sortedLaunchpad],
   );
+  const activeSearchEngine = useMemo(
+    () =>
+      builtInSearchEngines.find(
+        (engine) => engine.id === activeSearchEngineId,
+      ) ?? builtInSearchEngines[0],
+    [activeSearchEngineId],
+  );
+  const filteredLaunchpad = useMemo(() => {
+    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
+    if (!normalizedSearchTerm) {
+      return sortedLaunchpad;
+    }
+
+    return sortedLaunchpad
+      .map((group) => {
+        const isGroupMatch = group.name
+          .toLowerCase()
+          .includes(normalizedSearchTerm);
+
+        if (isGroupMatch) {
+          return group;
+        }
+
+        const matchingSites = group.websites.filter((site) => {
+          const normalizedDescription = site.description?.toLowerCase() ?? "";
+          return (
+            site.title.toLowerCase().includes(normalizedSearchTerm) ||
+            normalizedDescription.includes(normalizedSearchTerm)
+          );
+        });
+
+        if (matchingSites.length === 0) {
+          return null;
+        }
+
+        return {
+          ...group,
+          websites: matchingSites,
+        };
+      })
+      .filter((group): group is LaunchpadGroup => group !== null);
+  }, [searchTerm, sortedLaunchpad]);
   const resolvedActiveGroupUuid = useMemo(() => {
-    if (!launchpadSidebarEnabled || sortedLaunchpad.length === 0) {
+    if (!launchpadSidebarEnabled || filteredLaunchpad.length === 0) {
       return null;
     }
 
-    return sortedLaunchpad.some((group) => group.uuid === activeGroupUuid)
+    return filteredLaunchpad.some((group) => group.uuid === activeGroupUuid)
       ? activeGroupUuid
-      : sortedLaunchpad[0].uuid;
-  }, [activeGroupUuid, launchpadSidebarEnabled, sortedLaunchpad]);
+      : filteredLaunchpad[0].uuid;
+  }, [activeGroupUuid, filteredLaunchpad, launchpadSidebarEnabled]);
 
   useEffect(() => {
     iconUrlsRef.current = iconUrls;
   }, [iconUrls]);
+
+  useEffect(() => {
+    window.localStorage.setItem(
+      SEARCH_ENGINE_STORAGE_KEY,
+      activeSearchEngineId,
+    );
+  }, [activeSearchEngineId]);
 
   useEffect(() => {
     const token = getUserAccessToken();
@@ -306,7 +396,35 @@ const LaunchpadPage = () => {
   }, [contextMenu]);
 
   useEffect(() => {
-    if (!launchpadSidebarEnabled || sortedLaunchpad.length === 0) {
+    if (!searchEngineMenuOpen) {
+      return;
+    }
+
+    const handleClick = (event: MouseEvent) => {
+      if (
+        searchEngineMenuRef.current &&
+        event.target instanceof Node &&
+        !searchEngineMenuRef.current.contains(event.target)
+      ) {
+        setSearchEngineMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSearchEngineMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("mousedown", handleClick);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("mousedown", handleClick);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [searchEngineMenuOpen]);
+
+  useEffect(() => {
+    if (!launchpadSidebarEnabled || filteredLaunchpad.length === 0) {
       return;
     }
 
@@ -327,7 +445,7 @@ const LaunchpadPage = () => {
       },
     );
 
-    sortedLaunchpad.forEach((group) => {
+    filteredLaunchpad.forEach((group) => {
       const element = groupRefs.current[group.uuid];
       if (element) {
         observer.observe(element);
@@ -337,10 +455,32 @@ const LaunchpadPage = () => {
     return () => {
       observer.disconnect();
     };
-  }, [launchpadSidebarEnabled, sortedLaunchpad]);
+  }, [launchpadSidebarEnabled, filteredLaunchpad]);
 
   const getSiteUrlForMode = (site: LaunchpadWebsite) =>
     mode === "lan" && site.url_lan ? site.url_lan : site.url;
+
+  const handleSearch = () => {
+    const normalizedSearchTerm = searchTerm.trim();
+    if (!normalizedSearchTerm) {
+      return;
+    }
+
+    const encodedSearchTerm = encodeURIComponent(normalizedSearchTerm);
+    const searchUrl = activeSearchEngine.url_template.includes("%s")
+      ? activeSearchEngine.url_template.replace("%s", encodedSearchTerm)
+      : `${activeSearchEngine.url_template}${encodedSearchTerm}`;
+
+    window.open(searchUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleSearchKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   const handleOpenSite = (site: LaunchpadWebsite) => {
     window.open(getSiteUrlForMode(site), "_blank", "noopener,noreferrer");
@@ -353,6 +493,10 @@ const LaunchpadPage = () => {
       x: Math.min(e.clientX, window.innerWidth - 220),
       y: Math.min(e.clientY, window.innerHeight - 260),
     });
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
   };
 
   const handleDeleteSite = async (site: LaunchpadWebsite) => {
@@ -484,9 +628,156 @@ const LaunchpadPage = () => {
             {error}
           </div>
         )}
-        {!loading && !error && sortedLaunchpad.length > 0 ? (
+        {!loading && !error ? (
           <div className={styles.pageLayout} data-slot="launchpad-layout">
-            {sortedLaunchpad.length > 0 && launchpadSidebarEnabled ? (
+            <section
+              className={styles.searchSection}
+              data-ui="launchpad-search"
+            >
+              <div
+                className={styles.searchBar}
+                ref={searchEngineMenuRef}
+                data-ui="launchpad-search-bar"
+              >
+                <div className={styles.searchEngineArea}>
+                  <button
+                    type="button"
+                    className={styles.searchEngineTrigger}
+                    data-ui="launchpad-search-engine-trigger"
+                    aria-haspopup="menu"
+                    aria-expanded={searchEngineMenuOpen}
+                    onClick={() =>
+                      setSearchEngineMenuOpen((prevOpen) => !prevOpen)
+                    }
+                  >
+                    <span
+                      className={styles.searchEngineIcon}
+                      aria-hidden="true"
+                    >
+                      <DynamicIcon
+                        alt={activeSearchEngine.name}
+                        className={`${iconStyles.icon} ${styles.searchEngineGraphic}`}
+                        defaultIcon={activeSearchEngine.default_icon}
+                        unstyled
+                        fallback={
+                          <DefaultIcon
+                            label={activeSearchEngine.name.charAt(0)}
+                            alt={activeSearchEngine.name}
+                          />
+                        }
+                      />
+                    </span>
+                    <span className={styles.searchEngineName}>
+                      {activeSearchEngine.name}
+                    </span>
+                    <span
+                      className={styles.searchEngineArrow}
+                      aria-hidden="true"
+                    >
+                      <svg viewBox="0 0 20 20" fill="none">
+                        <path
+                          d="m5 7.5 5 5 5-5"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </button>
+                  {searchEngineMenuOpen ? (
+                    <div
+                      className={styles.searchEngineMenu}
+                      data-ui="launchpad-search-engine-menu"
+                      role="menu"
+                    >
+                      {builtInSearchEngines.map((engine) => (
+                        <button
+                          key={engine.id}
+                          type="button"
+                          className={styles.searchEngineOption}
+                          data-active={engine.id === activeSearchEngine.id}
+                          onClick={() => {
+                            setActiveSearchEngineId(engine.id);
+                            setSearchEngineMenuOpen(false);
+                          }}
+                        >
+                          <span
+                            className={styles.searchEngineOptionIcon}
+                            aria-hidden="true"
+                          >
+                            <DynamicIcon
+                              alt={engine.name}
+                              className={`${iconStyles.icon} ${styles.searchEngineGraphic}`}
+                              defaultIcon={engine.default_icon}
+                              unstyled
+                              fallback={
+                                <DefaultIcon
+                                  label={engine.name.charAt(0)}
+                                  alt={engine.name}
+                                />
+                              }
+                            />
+                          </span>
+                          <span>{engine.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+
+                <input
+                  id="launchpad-search"
+                  type="search"
+                  className={styles.searchInput}
+                  data-ui="launchpad-search-input"
+                  placeholder={t("launchpad.searchPlaceholder")}
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                />
+
+                <div className={styles.searchActions}>
+                  {searchTerm.trim() ? (
+                    <button
+                      type="button"
+                      className={styles.searchIconButton}
+                      data-ui="launchpad-search-clear"
+                      aria-label={t("common.cancel")}
+                      onClick={handleClearSearch}
+                    >
+                      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path
+                          d="m5 5 10 10M15 5 5 15"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </button>
+                  ) : null}
+                  <button
+                    type="button"
+                    className={`${styles.searchIconButton} ${styles.searchSubmitButton}`}
+                    data-ui="launchpad-search-submit"
+                    aria-label={t("launchpad.searchLabel")}
+                    onClick={handleSearch}
+                  >
+                    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                      <path
+                        d="m14.5 14.5 3 3M16 9a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {filteredLaunchpad.length > 0 && launchpadSidebarEnabled ? (
               <>
                 <div
                   className={styles.groupSidebarTrigger}
@@ -517,7 +808,7 @@ const LaunchpadPage = () => {
                   onMouseLeave={() => setSidebarHovered(false)}
                 >
                   <div className={styles.groupSidebarRail}>
-                    {sortedLaunchpad.map((group) => (
+                    {filteredLaunchpad.map((group) => (
                       <button
                         key={group.uuid}
                         type="button"
@@ -546,12 +837,12 @@ const LaunchpadPage = () => {
               </>
             ) : null}
 
-            {sortedLaunchpad.length > 0 ? (
+            {filteredLaunchpad.length > 0 ? (
               <div
                 className={`launchpad-group-list ${styles.groupList}`}
                 data-slot="launchpad-group-list"
               >
-                {sortedLaunchpad.map((group) => (
+                {filteredLaunchpad.map((group) => (
                   <section
                     key={group.uuid}
                     id={group.uuid}
@@ -616,6 +907,10 @@ const LaunchpadPage = () => {
                     </div>
                   </section>
                 ))}
+              </div>
+            ) : launchpad.length === 0 ? (
+              <div className={styles.stateCard} data-ui="launchpad-empty">
+                {t("launchpad.empty")}
               </div>
             ) : null}
           </div>
