@@ -9,17 +9,6 @@ This monorepo uses two workspaces: Rust (`Cargo.toml`) and Node (`pnpm-workspace
 - `apps/web`: Vite + React web client (`src/pages`, `src/components`, `src/router`).
 - `packages/`: shared packages used across frontend and backend, including Rust and TypeScript utilities.
 
-## Build, Test, and Development Commands
-
-Run commands from repo root unless noted.
-
-### Development
-
-- `pnpm tauri dev`: run client app in dev mode.
-- `pnpm build`: create client bundles.
-- `cargo run -p navix-server`: start backend locally.
-- `pnpm --dir apps/web dev`: start web dev server.
-
 ### Verification
 
 - `pnpm format`: format frontend code when only frontend code changed.
@@ -53,15 +42,8 @@ Run commands from repo root unless noted.
 
 ## Commit & Pull Request Guidelines
 
-- Recent history uses very short commit subjects; prefer clear, scoped summaries instead: `server: validate refresh token expiry`.
-- Keep subject lines imperative and <= 72 chars.
-- PRs should include: purpose, impacted apps (`server/web/client`), test evidence (commands run), and screenshots/GIFs for UI changes.
-- Link related issues and note config/migration impact (for example new SQL in `apps/server/migrations/`).
-
-## Security & Configuration Tips
-
-- Keep secrets in local env/config files only; never commit tokens, keys, or production DB URLs.
-- Review Tauri capability changes in `apps/client/src-tauri/capabilities/` carefully in PRs.
+- Commit messages follow a Conventional Commits-style prefix such as `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `style:`, or `build:`.
+- Keep commits scoped and descriptive; separate refactors from behavior changes when possible.
 
 ## Development Process
 
