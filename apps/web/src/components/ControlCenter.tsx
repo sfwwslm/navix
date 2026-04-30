@@ -129,9 +129,6 @@ const ControlCenter = ({
     username: "",
     password: "",
   });
-  const [storedAccounts, setStoredAccounts] = useState<StoredAccountSession[]>(
-    [],
-  );
   const [adminLoading, setAdminLoading] = useState(false);
   const [adminRefreshing, setAdminRefreshing] = useState(false);
   const [adminError, setAdminError] = useState<string | null>(null);
@@ -147,30 +144,6 @@ const ControlCenter = ({
     user: AdminUser;
     action: ConfirmAction;
   } | null>(null);
-
-  // 记录上次面板开启状态和活动区域，用于重置逻辑
-  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
-  const [prevActiveSection, setPrevActiveSection] = useState(activeSection);
-
-  if (isOpen !== prevIsOpen) {
-    setPrevIsOpen(isOpen);
-    if (!isOpen) {
-      // 面板关闭时，同步重置所有临时消息状态
-      setUsernameMessage(null);
-      setPasswordMessage(null);
-      setAdminError(null);
-      setAdminMessage(null);
-      setAccountSwitchMessage(null);
-      setConfirmState(null);
-    }
-  }
-
-  if (isOpen && activeSection !== prevActiveSection) {
-    setPrevActiveSection(activeSection);
-    if (activeSection === "account") {
-      setStoredAccounts(getStoredAccountSessions());
-    }
-  }
 
   useEffect(() => {
     if (!isOpen) {
@@ -375,6 +348,8 @@ const ControlCenter = ({
       : activeSection === "admin"
         ? t("controlCenter.adminTitle")
         : t("controlCenter.accountTitle");
+  const storedAccounts =
+    isOpen && activeSection === "account" ? getStoredAccountSessions() : [];
 
   if (!isOpen) {
     return null;
@@ -577,7 +552,7 @@ const ControlCenter = ({
         window.location.reload();
       }, 400);
     } catch (error) {
-      setStoredAccounts(removeStoredAccountSession(session.userUuid));
+      removeStoredAccountSession(session.userUuid);
       console.error(error);
       setAccountSwitchMessage({
         text: t("auth.accountSwitchFailed"),
@@ -589,7 +564,7 @@ const ControlCenter = ({
   };
 
   const handleRemoveStoredAccount = (session: StoredAccountSession) => {
-    setStoredAccounts(removeStoredAccountSession(session.userUuid));
+    removeStoredAccountSession(session.userUuid);
     setAccountSwitchMessage({
       text: t("auth.accountRemoved"),
       type: "success",

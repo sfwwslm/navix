@@ -132,6 +132,9 @@ const AppShell = () => {
         <Outlet context={{ launchpadMode, setLaunchpadMode }} />
       </main>
       <ControlCenter
+        key={
+          isControlCenterOpen ? "control-center-open" : "control-center-closed"
+        }
         isOpen={isControlCenterOpen}
         activeSection={activeControlCenterSection}
         currentUser={user}
