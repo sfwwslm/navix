@@ -9,7 +9,7 @@ type AuthLayoutProps = {
 };
 
 /**
- * 统一认证类页面的展示布局。
+ * 渲染认证类页面的统一展示布局，承载品牌展示区和表单卡片内容。
  */
 const AuthLayout = ({
   pageName,

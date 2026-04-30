@@ -9,8 +9,7 @@ interface UserMenuProps {
 }
 
 /**
- * 位于页面右上角的用户操作菜单
- * @param onLogout - 点击退出登录时触发的回调函数
+ * 渲染页面右上角的用户操作菜单，提供用户入口和退出登录操作。
  */
 const UserMenu = ({ onLogout }: UserMenuProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

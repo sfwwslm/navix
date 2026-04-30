@@ -4,6 +4,9 @@ import { useI18n } from "../i18n/useI18n";
 import styles from "./Footer.module.css";
 import type { VersionInfo } from "@navix/shared-ts";
 
+/**
+ * 渲染 Web 页面底部版本信息，并在挂载后读取后端版本号。
+ */
 const Footer = () => {
   const { t } = useI18n();
   const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null);

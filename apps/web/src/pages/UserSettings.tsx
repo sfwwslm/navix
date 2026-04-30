@@ -14,7 +14,7 @@ interface Message {
 type UserInfo = Claims;
 
 /**
- * 用户设置页面组件
+ * 渲染用户设置页面，支持查看用户信息、修改用户名和修改密码。
  */
 const UserSettingsPage = () => {
   const { t } = useI18n();

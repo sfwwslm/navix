@@ -74,6 +74,9 @@ const builtInSearchEngines: BuiltInSearchEngine[] = [
   },
 ];
 
+/**
+ * 渲染启动台站点的默认图标，在缺少自定义图标时展示品牌化占位图形。
+ */
 const DefaultIcon = ({ label, alt }: { label: string; alt: string }) => (
   <div className={styles.defaultIcon}>
     <svg viewBox="0 0 48 48" role="img" aria-label={alt}>
@@ -133,6 +136,9 @@ function getStoredSearchEngineId(): SearchEngineId {
   return storedValue === "google" ? "google" : "bing";
 }
 
+/**
+ * 渲染启动台主页面，提供搜索、分组导航、站点管理和显示模式切换。
+ */
 const LaunchpadPage = () => {
   const { launchpadSidebarEnabled, t } = useI18n();
   const [launchpad, setLaunchpad] = useState<LaunchpadGroup[]>([]);

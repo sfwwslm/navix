@@ -15,6 +15,9 @@ export type AppShellOutletContext = {
   setLaunchpadMode: Dispatch<SetStateAction<LaunchpadMode>>;
 };
 
+/**
+ * 渲染登录后的应用外壳，负责页面内容区、控制中心入口和全局偏好设置传递。
+ */
 const AppShell = () => {
   const navigate = useNavigate();
   const location = useLocation();

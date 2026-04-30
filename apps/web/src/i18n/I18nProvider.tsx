@@ -129,7 +129,7 @@ const interpolate = (template: string, values?: TranslationValues) => {
 };
 
 /**
- * 提供语言、主题与背景图偏好。
+ * 提供 Web 应用的语言、主题、背景和布局偏好上下文。
  */
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
   const [locale, setLocale] = useState<Locale>(getInitialLocale);

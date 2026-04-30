@@ -12,9 +12,7 @@ interface ProtectedRouteProps {
 }
 
 /**
- * 受保护的路由组件
- * 检查用户是否已登录，如果未登录则重定向到登录页
- * @param children - 需要保护的子组件
+ * 渲染受保护的路由内容，并在会话无效或角色不足时跳转到登录页。
  */
 const ProtectedRoute = ({
   children,

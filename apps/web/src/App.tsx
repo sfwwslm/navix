@@ -3,7 +3,7 @@ import Footer from "./components/Footer";
 import "./App.css";
 
 /**
- * 应用程序的根组件，负责渲染路由和全局组件
+ * 渲染 Web 应用根组件，负责挂载路由、页脚和全局视觉背景。
  */
 function App() {
   return (

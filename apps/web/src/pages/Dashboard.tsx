@@ -5,7 +5,7 @@ import { useCurrentUser } from "../hooks/useCurrentUser";
 import { useI18n } from "../i18n/useI18n";
 
 /**
- * 兼容旧路径的仪表盘页面，直接跳转到导航页
+ * 渲染兼容旧路径的仪表盘页面，并在完成会话检查后跳转到启动台。
  */
 const DashboardPage = () => {
   const { t } = useI18n();

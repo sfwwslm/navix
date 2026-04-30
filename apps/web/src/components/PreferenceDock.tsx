@@ -2,7 +2,7 @@ import styles from "./PreferenceDock.module.css";
 import { useI18n } from "../i18n/useI18n";
 
 /**
- * 提供语言、主题与背景图的全局切换入口。
+ * 渲染偏好设置浮动面板，提供语言、主题与背景图的全局切换入口。
  */
 const PreferenceDock = () => {
   const {

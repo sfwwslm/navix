@@ -4,7 +4,7 @@ import { useI18n } from "../i18n/useI18n";
 import styles from "./NotFound.module.css";
 
 /**
- * 404 Not Found 页面组件
+ * 渲染 404 页面，并提供返回首页的导航入口。
  */
 const NotFoundPage = () => {
   const { t } = useI18n();

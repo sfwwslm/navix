@@ -16,6 +16,9 @@ interface AdminUser {
   updated_at: string;
 }
 
+/**
+ * 渲染管理员用户管理页面，支持查看、创建、启停、删除和清理用户。
+ */
 const AdminPage = () => {
   const { t } = useI18n();
   const [users, setUsers] = useState<AdminUser[]>([]);

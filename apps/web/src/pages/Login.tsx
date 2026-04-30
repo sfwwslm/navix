@@ -17,9 +17,7 @@ type BootstrapStatusResponse = {
 };
 
 /**
- * 登录页面组件。
- *
- * 冷启动会话恢复已前移到路由入口，这里只负责初始化状态检查和显式登录流程。
+ * 渲染登录页面，负责初始化状态检查、管理员初始化和显式登录流程。
  */
 const LoginPage = () => {
   const { t } = useI18n();

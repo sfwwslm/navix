@@ -8,9 +8,7 @@ import AppShell from "../layouts/AppShell";
 import SessionBootstrap from "./SessionBootstrap";
 
 /**
- * 定义应用的全部路由。
- *
- * 所有登录入口和受保护页面都会先经过冷启动会话门禁，避免重复实现恢复逻辑。
+ * 定义 Web 应用的页面路由，并为登录入口和受保护页面挂载冷启动会话门禁。
  */
 export const AppRoutes = () => {
   return (
