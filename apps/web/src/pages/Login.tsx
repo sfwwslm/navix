@@ -55,7 +55,15 @@ const LoginPage = () => {
         if (!active) {
           return;
         }
-        setError(t("auth.bootstrapStatusFailed"));
+        const isNetworkFailure =
+          !window.navigator.onLine || err instanceof TypeError;
+        setError(
+          t(
+            isNetworkFailure
+              ? "auth.bootstrapStatusNetworkFailed"
+              : "auth.bootstrapStatusFailed",
+          ),
+        );
       } finally {
         if (active) {
           setBootstrapLoading(false);

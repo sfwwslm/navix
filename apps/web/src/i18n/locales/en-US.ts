@@ -71,7 +71,9 @@ export const enUSMessages: MessageTree = {
     bootstrapSuccess:
       "Administrator initialized. Please sign in with that account.",
     bootstrapStatusFailed:
-      "Failed to load bootstrap status. Please try again later.",
+      "The service is temporarily unavailable. Refresh the page and try again later.",
+    bootstrapStatusNetworkFailed:
+      "Cannot connect to the server. Check your network, then refresh the page.",
     loginTitle: "Sign in",
     loginDescription: "",
     adminTitle: "Admin sign in",

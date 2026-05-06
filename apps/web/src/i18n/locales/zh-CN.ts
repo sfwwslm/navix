@@ -69,7 +69,9 @@ export const zhCNMessages: MessageTree = {
     bootstrapTitle: "初始化管理员",
     bootstrapButton: "初始化系统",
     bootstrapSuccess: "管理员初始化成功，请使用该账号登录。",
-    bootstrapStatusFailed: "无法获取系统初始化状态，请稍后重试。",
+    bootstrapStatusFailed: "服务暂时不可用，请稍后刷新页面重试。",
+    bootstrapStatusNetworkFailed:
+      "暂时无法连接服务器，请检查网络后刷新页面重试。",
     loginTitle: "登录账户",
     loginDescription: "",
     adminTitle: "管理员登录",
