@@ -1,4 +1,4 @@
-FROM node:24-bullseye-slim AS frontend-builder
+FROM node:24-trixie-slim AS frontend-builder
 
 WORKDIR /workspace
 ARG NPM_REGISTRY
@@ -10,7 +10,7 @@ RUN corepack enable && corepack prepare pnpm@10.28.0 --activate \
 RUN pnpm install --frozen-lockfile
 RUN pnpm --dir apps/web web:build
 
-FROM rust:1.94-bullseye AS backend-builder
+FROM rust:1.95.0-trixie AS backend-builder
 
 WORKDIR /workspace
 ARG CARGO_REGISTRY_MIRROR
@@ -19,7 +19,7 @@ ENV CARGO_HTTP_TIMEOUT=120
 ENV CARGO_NET_RETRY=10
 ENV CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
 RUN if [ -n "${APT_MIRROR}" ]; then \
-      sed -i "s|http://deb.debian.org/debian|${APT_MIRROR}/debian|g; s|https://deb.debian.org/debian|${APT_MIRROR}/debian|g; s|http://deb.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|https://deb.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|http://security.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|https://security.debian.org/debian-security|${APT_MIRROR}/debian-security|g" /etc/apt/sources.list; \
+      sed -i "s|http://deb.debian.org/debian|${APT_MIRROR}/debian|g; s|https://deb.debian.org/debian|${APT_MIRROR}/debian|g; s|http://deb.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|https://deb.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|http://security.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|https://security.debian.org/debian-security|${APT_MIRROR}/debian-security|g" /etc/apt/sources.list.d/debian.sources; \
     fi
 RUN apt-get update && apt-get install -y --no-install-recommends \
   pkg-config \
@@ -39,11 +39,11 @@ WORKDIR /workspace/apps/server
 ENV DATABASE_URL=sqlite:database/navix-server.db
 RUN cargo build --release --locked -p navix-server
 
-FROM debian:bullseye-slim
+FROM debian:trixie-slim
 
 ARG APT_MIRROR
 RUN if [ -n "${APT_MIRROR}" ]; then \
-      sed -i "s|http://deb.debian.org/debian|${APT_MIRROR}/debian|g; s|https://deb.debian.org/debian|${APT_MIRROR}/debian|g; s|http://deb.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|https://deb.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|http://security.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|https://security.debian.org/debian-security|${APT_MIRROR}/debian-security|g" /etc/apt/sources.list; \
+      sed -i "s|http://deb.debian.org/debian|${APT_MIRROR}/debian|g; s|https://deb.debian.org/debian|${APT_MIRROR}/debian|g; s|http://deb.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|https://deb.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|http://security.debian.org/debian-security|${APT_MIRROR}/debian-security|g; s|https://security.debian.org/debian-security|${APT_MIRROR}/debian-security|g" /etc/apt/sources.list.d/debian.sources; \
     fi
 RUN apt-get update && apt-get install -y --no-install-recommends \
   ca-certificates \
