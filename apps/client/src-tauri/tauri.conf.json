@@ -14,6 +14,7 @@
     "active": true,
     "createUpdaterArtifacts": true,
     "category": "Utility",
+    "publisher": "Wenju Guo",    
     "shortDescription": "聚焦导航与同步的高效桌面助手。",
     "longDescription": "Navix 是一款基于 Tauri v2 和 React v19 构建的现代化桌面助手应用。它聚焦支持内外网切换的智能导航面板，以及安全的多端数据同步能力，旨在提供流畅、美观且高效的导航管理体验。",
     "icon": [
