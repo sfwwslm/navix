@@ -142,10 +142,7 @@ pub async fn get_used_icon_names(pool: &SqlitePool) -> DbResult<Vec<String>> {
     .await?;
 
     let mut names = std::collections::BTreeSet::new();
-    for row in website_rows
-        .into_iter()
-        .chain(search_engine_rows.into_iter())
-    {
+    for row in website_rows.into_iter().chain(search_engine_rows) {
         if let Some(name) = row.get::<Option<String>, _>("local_icon_path") {
             names.insert(name);
         }

@@ -503,7 +503,7 @@ async fn calculate_icon_diffs(
 
     let final_required_icons: HashSet<String> = website_icons
         .into_iter()
-        .chain(search_engine_icons.into_iter())
+        .chain(search_engine_icons)
         .collect();
 
     let server_storage_dir = PathBuf::from(STORAGE_BASE_DIR).join(user_uuid);
