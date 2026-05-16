@@ -2,6 +2,20 @@
 
 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，并遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
 
+## 0.2.1 - 2026-05-17
+
+### Changed
+
+- 升级桌面端 Tauri 及相关依赖，更新 Rust 工具链至 1.95.0，并同步 Docker 基础镜像，提升构建与运行环境的维护性。
+- 简化项目许可证配置，统一使用 MIT 许可证。
+- 调整 Tauri 打包配置，补充发布者信息并清理不再需要的配置字段。
+
+### Fixed
+
+- 修复 Web 端控制中心账户页首次打开时不显示已保存账号的问题。
+- 优化 Web 端登录页初始化阶段的错误提示，减少加载过程中的误导性报错。
+- 清理 Rust 代码中多余的迭代器转换，确保 clippy 严格检查通过。
+
 ## 0.2.0 - 2026-04-22
 
 ### Added
