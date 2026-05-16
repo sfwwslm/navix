@@ -8,13 +8,13 @@
     "tauri": "pnpm --dir apps/client tauri",
     "build": "pnpm --dir apps/client build",
     "build:fast": "pnpm --dir apps/client build -- --profile fast-release",
-    "web:dev": "pnpm --dir apps/web dev",
-    "web:build": "pnpm --dir apps/web web:build",
-    "server:dev": "pnpm --dir apps/web web:build && cargo run -p navix-server",
+    "web:dev": "pnpm --dir apps/server/web dev",
+    "web:build": "pnpm --dir apps/server/web web:build",
+    "server:dev": "pnpm --dir apps/server/web web:build && cargo run -p navix-server",
     "code:stats": "node --experimental-strip-types scripts/count-code-lines.ts",
-    "check": "pnpm --dir apps/client check && pnpm --dir apps/web check && pnpm --dir packages/shared-ts check && pnpm --dir packages/shared-ui check",
+    "check": "pnpm --dir apps/client check && pnpm --dir apps/server/web check && pnpm --dir packages/shared-ts check && pnpm --dir packages/shared-ui check",
     "check:all": "pnpm check && cargo clippy --all-targets --all-features -- -D warnings",
-    "format": "pnpm --dir apps/client format && pnpm --dir apps/web format && pnpm --dir packages/shared-ts format && pnpm --dir packages/shared-ui format",
+    "format": "pnpm --dir apps/client format && pnpm --dir apps/server/web format && pnpm --dir packages/shared-ts format && pnpm --dir packages/shared-ui format",
     "format:all": "pnpm format && cargo fmt"
   },
   "devDependencies": {

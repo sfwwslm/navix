@@ -2,7 +2,7 @@
 
 ## 概述
 
-本文档定义 Navix 项目的统一可观测性约定，适用于 `apps/server`、`apps/client`、`apps/web` 以及相关共享模块。
+本文档定义 Navix 项目的统一可观测性约定，适用于 `apps/server`、`apps/client`、`apps/server/web` 以及相关共享模块。
 
 目标是让日志、埋点与链路上下文保持一致，便于排障、质量分析与运行状态观察。
 

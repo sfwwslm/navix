@@ -12,7 +12,7 @@ if (!nextVersion) {
 
 const jsonFiles = [
   "package.json",
-  "apps/web/package.json",
+  "apps/server/web/package.json",
   "apps/client/package.json",
   "packages/shared-ts/package.json",
   "packages/shared-ui/package.json",

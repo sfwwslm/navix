@@ -5,8 +5,7 @@
 This monorepo uses two workspaces: Rust (`Cargo.toml`) and Node (`pnpm-workspace.yaml`).
 
 - `apps/client`: Tauri client app (`src/` for React UI, `src-tauri/` for Rust host).
-- `apps/server`: Rust + Axum backend (`src/api`, `src/services`, `src/models`, `migrations/`).
-- `apps/web`: Vite + React web client (`src/pages`, `src/components`, `src/router`).
+- `apps/server`: Rust + Axum backend (`src/api`, `src/services`, `src/models`, `migrations/`) and embedded web client (`web/src/pages`, `web/src/components`, `web/src/router`).
 - `packages/`: shared packages used across frontend and backend, including Rust and TypeScript utilities.
 
 ### Verification
@@ -22,8 +21,8 @@ This monorepo uses two workspaces: Rust (`Cargo.toml`) and Node (`pnpm-workspace
 
 - Rust: `rustfmt` defaults (4-space indent), `snake_case` modules/files, `CamelCase` types.
 - TypeScript/React: 2-space indent, `PascalCase` components (for example `UserMenu.tsx`), `camelCase` hooks/utilities (for example `useCurrentUser.ts`).
-- Keep feature-local styles next to components (`*.module.css` in `apps/web`, `*.styles.ts` in client).
-- Frontend in this repo means the TS/React code under `apps/web` and `apps/client`.
+- Keep feature-local styles next to components (`*.module.css` in `apps/server/web`, `*.styles.ts` in client).
+- Frontend in this repo means the TS/React code under `apps/server/web` and `apps/client`.
 - Use the repo formatting commands for TS/React code: `pnpm format` for frontend-only changes, `pnpm format:all` when frontend and backend both changed.
 - Frontend business UI must include stable, searchable DOM markers for debugging and automation. Prefer `data-page`, `data-ui`, and `data-slot`; use `id` only when global uniqueness is semantically required.
 

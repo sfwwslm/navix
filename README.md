@@ -30,7 +30,7 @@ Navix 是一个以桌面端为核心的 monorepo 项目，当前包含：
 - 同步与兼容性：`/api/compat`、同步会话 `start -> chunk -> complete`、图标上传下载、服务端实例 UUID 校验
 - 管理接口：用户列表、启用、禁用、清理、删除
 - 观测能力：结构化日志、`trace_id` / `request_id`
-- 静态资源分发：将 `apps/web/dist` 嵌入服务端二进制并作为前端 fallback 返回
+- 静态资源分发：将 `apps/server/web/dist` 嵌入服务端二进制并作为前端 fallback 返回
 
 服务端是桌面客户端同步链路中的核心服务，负责账号、导航同步与运行时管理。
 
@@ -50,8 +50,8 @@ navix/
 │   ├── client/             # Tauri 桌面客户端
 │   │   ├── src/             # React 界面层
 │   │   └── src-tauri/       # Rust 宿主、数据库、invoke、托盘等
-│   ├── server/              # Rust/Axum 服务端
-│   └── web/                 # 网页端静态前端
+│   └── server/              # Rust/Axum 服务端
+│       └── web/             # 网页端静态前端
 ├── packages/
 │   ├── shared-rs/           # Rust 共享类型与能力
 │   ├── shared-ts/           # TypeScript 共享类型与工具
@@ -81,7 +81,7 @@ pnpm tauri dev
 ### 启动网页端开发环境
 
 ```bash
-pnpm --dir apps/web dev
+pnpm --dir apps/server/web dev
 ```
 
 ### 启动服务端
@@ -93,7 +93,7 @@ pnpm server:dev
 如果只想直接运行服务端，也可以：
 
 ```bash
-pnpm --dir apps/web web:build
+pnpm --dir apps/server/web web:build
 cargo run -p navix-server
 ```
 

@@ -11,7 +11,7 @@ fn main() -> Result<()> {
     // 如果目标是 Windows，则设置应用程序图标
     if cfg!(target_os = "windows") {
         let mut res = winres::WindowsResource::new();
-        res.set_icon("../web/public/icon.ico");
+        res.set_icon("web/public/icon.ico");
         res.compile().expect("Failed to compile Windows resources");
     }
 

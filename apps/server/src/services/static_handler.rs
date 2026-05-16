@@ -10,7 +10,7 @@ use serde::Serialize;
 /// 使用 rust-embed 宏，在编译时将前端静态资源打包进二进制文件。
 /// `folder` 路径是相对于 server crate 目录（`apps/server/`）的。
 #[derive(RustEmbed)]
-#[folder = "../web/dist/"]
+#[folder = "web/dist/"]
 struct FrontendAssets;
 
 /// 用于 API 404 响应的 JSON 结构体。

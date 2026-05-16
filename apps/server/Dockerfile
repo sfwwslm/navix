@@ -8,7 +8,7 @@ COPY . .
 RUN corepack enable && corepack prepare pnpm@10.28.0 --activate \
   && if [ -n "${NPM_REGISTRY}" ]; then pnpm config set registry "${NPM_REGISTRY}"; fi
 RUN pnpm install --frozen-lockfile
-RUN pnpm --dir apps/web web:build
+RUN pnpm --dir apps/server/web web:build
 
 FROM rust:1.95.0-trixie AS backend-builder
 
@@ -33,7 +33,7 @@ RUN if [ -n "${CARGO_REGISTRY_MIRROR}" ]; then \
     fi
 
 COPY . .
-COPY --from=frontend-builder /workspace/apps/web/dist ./apps/web/dist
+COPY --from=frontend-builder /workspace/apps/server/web/dist ./apps/server/web/dist
 
 WORKDIR /workspace/apps/server
 ENV DATABASE_URL=sqlite:database/navix-server.db

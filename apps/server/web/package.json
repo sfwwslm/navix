@@ -7,7 +7,7 @@
     "dev": "vite",
     "web:build": "tsc -b && vite build",
     "type-check": "tsc --noEmit",
-    "lint": "eslint --config ../../eslint.config.ts src --max-warnings=0",
+    "lint": "eslint --config ../../../eslint.config.ts src --max-warnings=0",
     "check": "pnpm type-check && pnpm lint",
     "preview": "vite preview",
     "format": "prettier --write src/"
