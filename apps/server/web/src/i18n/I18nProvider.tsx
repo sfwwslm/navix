@@ -155,7 +155,6 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     applyWebTheme(themeName);
     window.localStorage.setItem(THEME_KEY, themeName);
-    document.documentElement.dataset.appTheme = themeName;
   }, [themeName]);
 
   useEffect(() => {

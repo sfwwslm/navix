@@ -27,7 +27,7 @@ body,
   --app-shadow-hard: 0 28px 70px rgba(3, 8, 18, 0.35);
 }
 
-:root[data-app-theme="light"] {
+:root[data-nu-theme="light"] {
   --app-surface-rgb: 255, 255, 255;
   --app-surface-strong-rgb: 247, 249, 253;
   --app-text-primary: #111827;
