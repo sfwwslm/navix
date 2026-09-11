@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.3.1](https://github.com/guowenju/navix/compare/0.3.0...0.3.1) - 2026-09-11
+
 ### Added
 
 - Web 端登录页新增 GitHub 仓库入口，方便快速访问项目主页。
