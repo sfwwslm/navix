@@ -8,6 +8,10 @@
 
 - Web 端登录页新增 GitHub 仓库入口，方便快速访问项目主页。
 
+### Fixed
+
+- 修复 Web 端刷新登录页时短暂显示导航页面骨架的问题。
+
 ## [0.3.0](https://github.com/guowenju/navix/compare/0.2.4...0.3.0) - 2026-09-01
 
 ### Added
