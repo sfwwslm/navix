@@ -130,11 +130,9 @@ const LoginPage = () => {
   /**
    * 根据系统初始化状态切换登录页标题和提交按钮文案。
    */
-  const cardTitle = bootstrapLoading
-    ? t("common.loading")
-    : initialized
-      ? t("auth.loginTitle")
-      : t("auth.bootstrapTitle");
+  const cardTitle = initialized
+    ? t("auth.loginTitle")
+    : t("auth.bootstrapTitle");
   const cardDescription = initialized ? t("auth.loginDescription") : "";
   const submitLabel = initialized
     ? t("auth.loginButton")
