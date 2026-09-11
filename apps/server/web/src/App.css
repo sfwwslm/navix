@@ -27,7 +27,7 @@ body,
   --app-shadow-hard: 0 28px 70px rgba(3, 8, 18, 0.35);
 }
 
-:root[data-app-theme="light"] {
+:root[data-nu-theme="light"] {
   --app-surface-rgb: 255, 255, 255;
   --app-surface-strong-rgb: 247, 249, 253;
   --app-text-primary: #111827;
@@ -155,6 +155,37 @@ body {
   background-size: 32px 32px;
   mask-image: radial-gradient(circle at center, black 62%, transparent 100%);
   opacity: 0.35;
+}
+
+.login-github-link {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--app-card-border);
+  color: #bdc9dc;
+  background: rgba(10, 15, 26, 0.3);
+}
+
+.login-github-link:hover {
+  color: var(--app-text-primary);
+  border-color: var(--app-accent-border);
+  background: color-mix(
+    in srgb,
+    var(--app-card-bg-strong) 90%,
+    var(--app-accent) 10%
+  );
+}
+
+.login-github-link:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 3px;
 }
 
 .auth-page {
@@ -402,6 +433,11 @@ body {
 }
 
 @media (max-width: 640px) {
+  .login-github-link {
+    top: 16px;
+    right: 16px;
+  }
+
   .auth-container {
     padding: 1.4rem;
     border-radius: 22px;

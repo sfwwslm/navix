@@ -24,8 +24,9 @@ type AuthTokenResponse = {
 const SessionBootstrap = () => {
   const { t } = useI18n();
   const location = useLocation();
+  // 本地没有 refresh token 时无需等待副作用，首帧即可按当前路由渲染。
   // `ready` 表示冷启动鉴权判定已经结束，`restored` 表示已成功恢复旧会话。
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(() => !getUserRefreshToken());
   const [restored, setRestored] = useState(false);
 
   useEffect(() => {
@@ -78,8 +79,21 @@ const SessionBootstrap = () => {
   }, []);
 
   const hasRefreshToken = Boolean(getUserRefreshToken());
+  const isLoginEntry =
+    location.pathname === "/" || location.pathname === "/login";
 
   if (!ready) {
+    if (isLoginEntry) {
+      return (
+        <div
+          data-page="session-bootstrap"
+          data-ui="session-bootstrap"
+          data-slot="session-bootstrap-neutral"
+          aria-busy="true"
+        />
+      );
+    }
+
     return (
       <div
         className={appShellStyles.shell}
@@ -151,11 +165,7 @@ const SessionBootstrap = () => {
     );
   }
 
-  if (
-    restored &&
-    hasRefreshToken &&
-    (location.pathname === "/" || location.pathname === "/login")
-  ) {
+  if (restored && hasRefreshToken && isLoginEntry) {
     // 只有落在登录入口时才需要替换到业务首页，避免打断用户刷新业务页。
     return <Navigate to="/launchpad" replace />;
   }
